@@ -44,7 +44,7 @@ static t_philo	**init_philo_thread(t_var *var)
 	{
 		philos[i] = init_philo(var, i + 1);
 		if (!philos[i])
-			return (free_tab(i, philos));
+			return (free_philos(i, philos));
 		if (i != 0)
 		{
 			philos[i]->left_fork = &(philos[i - 1]->right_fork);
@@ -57,15 +57,10 @@ static t_philo	**init_philo_thread(t_var *var)
 	return (philos);
 }
 
-int	check_positif(t_var *var)
-{
-	return (var->n_philo <= 0 || var->time_to_die < 0
-		|| var->time_to_eat < 0 || var->time_to_sleep < 0);
-}
-
 t_philo	**init_struct(int argc, char **argv)
 {
 	t_var	*var;
+	t_philo	**philos;
 
 	var = malloc(sizeof(t_var));
 	if (!var)
@@ -78,7 +73,11 @@ t_philo	**init_struct(int argc, char **argv)
 		var->n_must_eat = ft_atoi(argv[5]);
 	else
 		var->n_must_eat = 0;
-	if (check_positif(var))
+	if (var->n_philo <= 0 || var->time_to_die < 0
+		|| var->time_to_eat < 0 || var->time_to_sleep < 0)
 		return (free_var(var));
-	return (init_philo_thread(var));
+	philos = init_philo_thread(var);
+	if (!philos)
+		return (free_var(var));
+	return (philos);
 }

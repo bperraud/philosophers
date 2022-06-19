@@ -46,5 +46,8 @@ int	main(int argc, char **argv)
 	i = -1;
 	while (++i <philos[0]->var->n_philo)
 		pthread_join(philos[i]->thread_id, NULL);
+
+	free(philos[0]->var);
+	free_philos(philos[0]->var->n_philo, philos);
 	return (0);
 }

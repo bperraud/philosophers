@@ -48,7 +48,7 @@ int	ft_atoi(const char *str)
 	return ((int)(res * neg));
 }
 
-t_philo	**free_tab(int index, t_philo **philos)
+t_philo	**free_philos(int index, t_philo **philos)
 {
 	int	i;
 

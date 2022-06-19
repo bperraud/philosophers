@@ -58,7 +58,7 @@ typedef struct s_philo
 
 /* utils */
 int		ft_atoi(const char *str);
-t_philo	**free_tab(int index, t_philo **philos);
+t_philo	**free_philos(int index, t_philo **philos);
 t_philo	**free_var(t_var *var);
 
 /* init */
