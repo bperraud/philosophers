@@ -32,6 +32,18 @@ enum
 	DIE
 };
 
+typedef struct s_var
+{
+	int				n_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				n_must_eat;
+	t_time			t0;
+	pthread_mutex_t	std_mutex;
+	pthread_mutex_t	mutex;
+}					t_var;
+
 typedef struct s_philo
 {
 	int				index;
@@ -41,33 +53,20 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	right_fork;
+	t_var			*var;
 }					t_philo;
-
-typedef struct s_var
-{
-	int				n_philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				n_must_eat;
-	int				philo_id;
-	t_time			t0;
-	t_philo			**philos;
-	pthread_mutex_t	std_mutex;
-	pthread_mutex_t	mutex;
-}					t_var;
 
 /* utils */
 int		ft_atoi(const char *str);
-t_var	*free_tab(int index, t_var *var);
-t_var	*free_var(t_var *var);
+t_philo	**free_tab(int index, t_philo **philos);
+t_philo	**free_var(t_var *var);
 
 /* init */
-t_var	*init_struct(int argc, char **argv);
+t_philo	**init_struct(int argc, char **argv);
 
 /* philo action */
-void	eat(t_philo *philo, t_var *var);
-void	think(t_philo *philo, t_var *var);
-void	p_sleep(t_philo *philo, t_var *var);
+void	eat(t_philo *philo);
+void	think(t_philo *philo);
+void	p_sleep(t_philo *philo);
 
 #endif

@@ -48,21 +48,21 @@ int	ft_atoi(const char *str)
 	return ((int)(res * neg));
 }
 
-t_var	*free_tab(int index, t_var *var)
+t_philo	**free_tab(int index, t_philo **philos)
 {
 	int	i;
 
 	i = 0;
 	while (i < index)
 	{
-		free(var->philos[i]);
+		free(philos[i]);
 		i++;
 	}
-	free(var->philos);
+	free(philos);
 	return (NULL);
 }
 
-t_var	*free_var(t_var *var)
+t_philo	**free_var(t_var *var)
 {
 	free(var);
 	return (NULL);
