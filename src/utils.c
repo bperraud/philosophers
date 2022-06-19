@@ -68,3 +68,65 @@ t_philo	**free_var(t_var *var)
 	return (NULL);
 }
 
+int	get_time(t_var *var)
+{
+	t_time	t;
+	int		s;
+	int		s0;
+	int		ms;
+	int		ms0;
+
+	if (gettimeofday(&t, NULL) != 0)
+		return (0);
+	s = t.tv_sec * 1000;
+	ms = t.tv_usec / 1000;
+	s0 = var->t0.tv_sec * 1000;
+	ms0 = var->t0.tv_usec / 1000;
+	return (s - s0 + ms - ms0);
+}
+
+void	print_action(t_philo *philo, int action)
+{
+	pthread_mutex_lock(&philo->var->std_mutex);
+	if (!philo->dead)
+	{
+		if (action == FORK)
+			printf("%d %d has taken a fork\n", get_time(philo->var), philo->index);
+		else if (action == EAT)
+			printf("%d %d is eating\n", get_time(philo->var), philo->index);
+		else if (action == SLEEP)
+			printf("%d %d is sleeping\n", get_time(philo->var), philo->index);
+		else if (action == THINK)
+			printf("%d %d is thinking\n", get_time(philo->var), philo->index);
+		printf(RESET);
+	}
+	else if (action == DIE)
+	{
+		printf("%d %d died\n", get_time(philo->var), philo->index);
+	}
+	pthread_mutex_unlock(&philo->var->std_mutex);
+}
+
+void	sleep_ms(int ms)
+{
+	t_time	t0;
+	t_time	t;
+	long	time0;
+	long	time;
+
+	gettimeofday(&t0, NULL);
+	gettimeofday(&t, NULL);
+	time0 = t0.tv_sec * 1000000 + t0.tv_usec;
+	time = t.tv_sec * 1000000 + t.tv_usec;
+	while (time - time0 < ms * 1000)
+	{
+		gettimeofday(&t, NULL);
+		time = t.tv_sec * 1000000 + t.tv_usec;
+		if (time - time0 < ms * 1000 - 50)
+			usleep(50);
+		else
+			usleep(ms / 1000 - (time - time0) / 1000000);
+	}
+}
+
+

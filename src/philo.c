@@ -12,17 +12,36 @@
 
 # include "philo.h"
 
-
 void	eat(t_philo *philo)
 {
-	if (philo->n_eaten == philo->var->n_must_eat)
+	if (philo->var->n_must_eat && philo->n_eaten == philo->var->n_must_eat)
 		return ;
 
-	pthread_mutex_lock(&philo->var->mutex);
-	if (philo->left_fork)
+	if (philo->left_fork_index < philo->left_fork_index)
+	{
+		print_action(philo, FORK);
+		pthread_mutex_lock(philo->left_fork);
+		print_action(philo, FORK);
+		pthread_mutex_lock(&philo->right_fork);
+	}
+	else
+	{
+		print_action(philo, FORK);
+		pthread_mutex_lock(&philo->right_fork);
+		print_action(philo, FORK);
+		pthread_mutex_lock(philo->left_fork);
+	}
 
+	//time to eat
+	print_action(philo, EAT);
+	sleep_ms(philo->var->time_to_eat);
 
-	pthread_mutex_unlock(&philo->var->mutex);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(&philo->right_fork);
+
+	//time to sleep
+	print_action(philo, SLEEP);
+	sleep_ms(philo->var->time_to_sleep);
 
 	return ;
 }

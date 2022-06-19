@@ -21,6 +21,16 @@
 # include <sys/time.h>
 # include <stdatomic.h>
 
+# define BLACK "\e[0;30m"
+# define RED "\e[0;31m"
+# define GREEN "\e[0;32m"
+# define YELLOW "\e[0;33m"
+# define BLUE "\e[0;34m"
+# define MAGENTA "\e[0;35m"
+# define CYAN "\e[0;36m"
+# define WHITE "\e[0;37m"
+# define RESET "\e[0m"
+
 typedef struct timeval	t_time;
 
 enum
@@ -41,7 +51,6 @@ typedef struct s_var
 	int				n_must_eat;
 	t_time			t0;
 	pthread_mutex_t	std_mutex;
-	pthread_mutex_t	mutex;
 }					t_var;
 
 typedef struct s_philo
@@ -53,6 +62,8 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	right_fork;
+	int				left_fork_index;
+	int				right_fork_index;
 	t_var			*var;
 }					t_philo;
 
@@ -60,6 +71,8 @@ typedef struct s_philo
 int		ft_atoi(const char *str);
 t_philo	**free_philos(int index, t_philo **philos);
 t_philo	**free_var(t_var *var);
+void	sleep_ms(int ms);
+void	print_action(t_philo *philo, int action);
 
 /* init */
 t_philo	**init_struct(int argc, char **argv);

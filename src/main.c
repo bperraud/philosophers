@@ -17,14 +17,10 @@ void	*launch_thread(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	pthread_mutex_lock(&philo->var->mutex);
-	printf("thread id: %li\n", philo->thread_id);
-	pthread_mutex_unlock(&philo->var->mutex);
-	return (NULL);
+
 	while (!philo->dead)
 	{
 		eat(philo);
-		think(philo);
 	}
 	return (NULL);
 }
@@ -41,12 +37,12 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (-1);
 	i = -1;
+
 	while (i++ < philos[0]->var->n_philo - 1)
 		pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
 	i = -1;
-	while (++i <philos[0]->var->n_philo)
+	while (i++ < philos[0]->var->n_philo - 1)
 		pthread_join(philos[i]->thread_id, NULL);
-
 	free(philos[0]->var);
 	free_philos(philos[0]->var->n_philo, philos);
 	return (0);

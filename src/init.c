@@ -24,7 +24,11 @@ t_philo	*init_philo(t_var *var, int index)
 	philo->dead = 0;
 	philo->index = index;
 	philo->var = var;
-	//philo->right_dirty = 1;
+	philo->right_fork_index = index;
+	if (!index == var->n_philo)
+		philo->left_fork_index = index + 1;
+	else
+		philo->left_fork_index = 1;
 	if (pthread_mutex_init(&philo->right_fork, NULL) != 0)
 		return (NULL);
 	return (philo);
@@ -46,14 +50,10 @@ static t_philo	**init_philo_thread(t_var *var)
 		if (!philos[i])
 			return (free_philos(i, philos));
 		if (i != 0)
-		{
 			philos[i]->left_fork = &(philos[i - 1]->right_fork);
-			//var->philos[i]->left_dirty = &(var->philos[i - 1]->right_dirty);
-		}
 		i++;
 	}
 	philos[0]->left_fork = &(philos[i - 1]->right_fork);
-	//var->philos[0]->left_dirty = &(var->philos[i - 1]->right_dirty);
 	return (philos);
 }
 
@@ -76,6 +76,9 @@ t_philo	**init_struct(int argc, char **argv)
 	if (var->n_philo <= 0 || var->time_to_die < 0
 		|| var->time_to_eat < 0 || var->time_to_sleep < 0)
 		return (free_var(var));
+	if (pthread_mutex_init(&var->std_mutex, NULL) != 0)
+		return (NULL);
+	gettimeofday(&var->t0, NULL);
 	philos = init_philo_thread(var);
 	if (!philos)
 		return (free_var(var));
