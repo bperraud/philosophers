@@ -88,22 +88,21 @@ int	get_time(t_var *var)
 void	print_action(t_philo *philo, int action)
 {
 	pthread_mutex_lock(&philo->var->std_mutex);
+	printf("%d ", get_time(philo->var));
 	if (!philo->dead)
 	{
 		if (action == FORK)
-			printf("%d %d has taken a fork\n", get_time(philo->var), philo->index);
+			printf("%d has taken a fork\n", philo->index);
 		else if (action == EAT)
-			printf("%d %d is eating\n", get_time(philo->var), philo->index);
+			printf("%d is eating\n", philo->index);
 		else if (action == SLEEP)
-			printf("%d %d is sleeping\n", get_time(philo->var), philo->index);
+			printf("%d is sleeping\n", philo->index);
 		else if (action == THINK)
-			printf("%d %d is thinking\n", get_time(philo->var), philo->index);
-		printf(RESET);
+			printf("%d is thinking\n", philo->index);
+		//printf(RESET);
 	}
 	else if (action == DIE)
-	{
 		printf("%d %d died\n", get_time(philo->var), philo->index);
-	}
 	pthread_mutex_unlock(&philo->var->std_mutex);
 }
 

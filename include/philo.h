@@ -56,8 +56,8 @@ typedef struct s_var
 typedef struct s_philo
 {
 	int				index;
-	atomic_int		last_meal;
-	atomic_int		n_eaten;
+	atomic_int		last_meal_time;
+	atomic_int		meal_eaten;
 	atomic_int		dead;
 	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
@@ -73,6 +73,7 @@ t_philo	**free_philos(int index, t_philo **philos);
 t_philo	**free_var(t_var *var);
 void	sleep_ms(int ms);
 void	print_action(t_philo *philo, int action);
+int		get_time(t_var *var);
 
 /* init */
 t_philo	**init_struct(int argc, char **argv);
@@ -80,6 +81,6 @@ t_philo	**init_struct(int argc, char **argv);
 /* philo action */
 void	eat(t_philo *philo);
 void	think(t_philo *philo);
-void	p_sleep(t_philo *philo);
+void	sleeping(t_philo *philo);
 
 #endif

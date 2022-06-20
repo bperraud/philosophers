@@ -19,8 +19,8 @@ t_philo	*init_philo(t_var *var, int index)
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (NULL);
-	philo->last_meal = 0;
-	philo->n_eaten = 0;
+	philo->last_meal_time = 0;
+	philo->meal_eaten = 0;
 	philo->dead = 0;
 	philo->index = index;
 	philo->var = var;
