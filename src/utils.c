@@ -12,14 +12,6 @@
 
 # include "philo.h"
 
-static int	space(const char *str, int i)
-{
-	while (str[i] == 32 || str[i] == '\t' || str[i] == '\n'
-		|| str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
-		i++;
-	return (i);
-}
-
 int	ft_atoi(const char *str)
 {
 	int				i;
@@ -28,7 +20,7 @@ int	ft_atoi(const char *str)
 
 	neg = 1;
 	res = 0;
-	i = space(str, 0);
+	i = 0;
 	if (str[i] == '-')
 	{
 		neg *= -1;
