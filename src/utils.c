@@ -54,7 +54,7 @@ t_philo	**free_philos(int index, t_philo **philos)
 	return (NULL);
 }
 
-t_philo	**free_var(t_var *var)
+t_var	*free_var(t_var *var)
 {
 	free(var);
 	return (NULL);

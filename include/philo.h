@@ -79,13 +79,14 @@ int	philo(int argc, char **argv);
 /* utils */
 int		ft_atoi(const char *str);
 t_philo	**free_philos(int index, t_philo **philos);
-t_philo	**free_var(t_var *var);
+t_var	*free_var(t_var *var);
 void	sleep_ms(int ms);
 void	print_action(t_philo *philo, int action);
 int		get_time(t_var *var);
 
 /* init */
-t_philo	**init_struct(int argc, char **argv);
+t_var	*init_var(int argc, char **argv);
+t_philo	**init_philos(t_var *var);
 
 /* philo action */
 void	eat(t_philo *philo);

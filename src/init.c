@@ -36,7 +36,7 @@ static t_philo	*init_philo(t_var *var, int index)
 	return (philo);
 }
 
-static t_philo	**init_philo_thread(t_var *var)
+t_philo	**init_philos(t_var *var)
 {
 	t_philo	**philos;
 	int		i;
@@ -58,10 +58,9 @@ static t_philo	**init_philo_thread(t_var *var)
 	return (philos);
 }
 
-t_philo	**init_struct(int argc, char **argv)
+t_var	*init_var(int argc, char **argv)
 {
 	t_var	*var;
-	t_philo	**philos;
 
 	var = malloc(sizeof(t_var));
 	if (!var)
@@ -82,8 +81,5 @@ t_philo	**init_struct(int argc, char **argv)
 		|| pthread_mutex_init(&var->end_mutex, NULL) != 0)
 		return (NULL);
 	gettimeofday(&var->t0, NULL);
-	philos = init_philo_thread(var);
-	if (!philos)
-		return (free_var(var));
-	return (philos);
+	return (var);
 }
