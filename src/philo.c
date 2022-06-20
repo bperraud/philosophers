@@ -12,6 +12,17 @@
 
 # include "philo.h"
 
+int	check_death(t_philo *philo)
+{
+	if (philo->last_meal_time - get_time(philo->var) > philo->var->time_to_die)
+	{
+		philo->dead = 1;
+		print_action(philo, DIE);
+		return (1);
+	}
+	return (0);
+}
+
 void	eat(t_philo *philo)
 {
 	if (philo->var->n_must_eat && philo->meal_eaten == philo->var->n_must_eat)
@@ -33,6 +44,10 @@ void	eat(t_philo *philo)
 	}
 
 	//time to eat
+	//check death
+	if (check_death(philo))
+		return ;
+
 	print_action(philo, EAT);
 	sleep_ms(philo->var->time_to_eat);
 	philo->meal_eaten += 1;
