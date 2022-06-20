@@ -49,8 +49,10 @@ typedef struct s_var
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				n_must_eat;
+	int				simulation_end;
 	t_time			t0;
 	pthread_mutex_t	std_mutex;
+	pthread_mutex_t end_mutex;
 }					t_var;
 
 typedef struct s_philo
@@ -82,5 +84,6 @@ t_philo	**init_struct(int argc, char **argv);
 void	eat(t_philo *philo);
 void	think(t_philo *philo);
 void	sleeping(t_philo *philo);
+int		check_death(t_philo *philo);
 
 #endif

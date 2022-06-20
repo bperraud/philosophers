@@ -17,7 +17,7 @@ void	*launch_thread(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	while (!philo->dead)
+	while (!check_death(philo))
 	{
 		eat(philo);
 	}

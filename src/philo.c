@@ -14,13 +14,35 @@
 
 int	check_death(t_philo *philo)
 {
+	//pthread_mutex_lock(&philo->var->end_mutex);
+	if (philo->dead)
+		return (1);
+	//if (philo->var->simulation_end)
+	//{
+	//	//pthread_mutex_unlock(&philo->var->end_mutex);
+	//	return (1);
+	//}
 	if (get_time(philo->var) - philo->last_meal_time > philo->var->time_to_die)
 	{
 		philo->dead = 1;
 		print_action(philo, DIE);
+		//philo->var->simulation_end = 1;
+		//pthread_mutex_unlock(&philo->var->end_mutex);
+		exit(1);
 		return (1);
 	}
+	//pthread_mutex_unlock(&philo->var->end_mutex);
 	return (0);
+}
+
+static int	unlock_after_death(t_philo *philo)
+{
+	if (check_death(philo))
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
+		return (1);
+	}
 }
 
 void	eat(t_philo *philo)

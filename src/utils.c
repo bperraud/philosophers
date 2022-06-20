@@ -79,10 +79,11 @@ int	get_time(t_var *var)
 
 void	print_action(t_philo *philo, int action)
 {
+	usleep(30);
 	pthread_mutex_lock(&philo->var->std_mutex);
-	printf("%d ", get_time(philo->var));
 	if (!philo->dead)
 	{
+		printf("%d ", get_time(philo->var));
 		if (action == FORK)
 			printf("%d has taken a fork\n", philo->index);
 		else if (action == EAT)
@@ -94,7 +95,10 @@ void	print_action(t_philo *philo, int action)
 		//printf(RESET);
 	}
 	else if (action == DIE)
+	{
+		printf("%d ", get_time(philo->var));
 		printf("%d died\n", philo->index);
+	}
 	pthread_mutex_unlock(&philo->var->std_mutex);
 }
 

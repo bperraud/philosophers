@@ -19,7 +19,7 @@ t_philo	*init_philo(t_var *var, int index)
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (NULL);
-	philo->last_meal_time = 0;
+	philo->last_meal_time = get_time(var);
 	philo->meal_eaten = 0;
 	philo->dead = 0;
 	philo->index = index;
@@ -39,10 +39,10 @@ static t_philo	**init_philo_thread(t_var *var)
 	t_philo	**philos;
 	int		i;
 
-	philos = malloc(sizeof(t_philo *) * var->n_philo);
+	philos = malloc(sizeof(t_philo *) * var->n_philo );
 	if (!philos)
 		return (NULL);
-	philos[var->n_philo + 1] = NULL;
+	//philos[var->n_philo + 1] = NULL;
 	i = 0;
 	while (i < var->n_philo)
 	{
@@ -73,10 +73,13 @@ t_philo	**init_struct(int argc, char **argv)
 		var->n_must_eat = ft_atoi(argv[5]);
 	else
 		var->n_must_eat = 0;
+
+	var->simulation_end = 0;
+
 	if (var->n_philo <= 0 || var->time_to_die < 0
 		|| var->time_to_eat < 0 || var->time_to_sleep < 0)
 		return (free_var(var));
-	if (pthread_mutex_init(&var->std_mutex, NULL) != 0)
+	if (pthread_mutex_init(&var->std_mutex, NULL) != 0 || pthread_mutex_init(&var->end_mutex, NULL) != 0)
 		return (NULL);
 	gettimeofday(&var->t0, NULL);
 	philos = init_philo_thread(var);
