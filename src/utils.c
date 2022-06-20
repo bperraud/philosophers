@@ -102,7 +102,7 @@ void	print_action(t_philo *philo, int action)
 		//printf(RESET);
 	}
 	else if (action == DIE)
-		printf("%d %d died\n", get_time(philo->var), philo->index);
+		printf("%d died\n", philo->index);
 	pthread_mutex_unlock(&philo->var->std_mutex);
 }
 

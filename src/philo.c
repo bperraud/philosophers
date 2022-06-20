@@ -14,7 +14,7 @@
 
 int	check_death(t_philo *philo)
 {
-	if (philo->last_meal_time - get_time(philo->var) > philo->var->time_to_die)
+	if (get_time(philo->var) - philo->last_meal_time > philo->var->time_to_die)
 	{
 		philo->dead = 1;
 		print_action(philo, DIE);
@@ -46,7 +46,11 @@ void	eat(t_philo *philo)
 	//time to eat
 	//check death
 	if (check_death(philo))
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
 		return ;
+	}
 
 	print_action(philo, EAT);
 	sleep_ms(philo->var->time_to_eat);
