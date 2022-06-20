@@ -69,6 +69,9 @@ typedef struct s_philo
 	t_var			*var;
 }					t_philo;
 
+/* main */
+int	philo(int argc, char **argv);
+
 /* utils */
 int		ft_atoi(const char *str);
 t_philo	**free_philos(int index, t_philo **philos);

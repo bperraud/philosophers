@@ -12,7 +12,7 @@
 
 # include "philo.h"
 
-t_philo	*init_philo(t_var *var, int index)
+static t_philo	*init_philo(t_var *var, int index)
 {
 	t_philo	*philo;
 

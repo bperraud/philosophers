@@ -77,34 +77,6 @@ int	get_time(t_var *var)
 	return (s - s0 + ms - ms0);
 }
 
-void	print_action(t_philo *philo, int action)
-{
-	if (philo->var->simulation_end)
-		return ;
-	pthread_mutex_lock(&philo->var->std_mutex);
-	if (!philo->dead)
-	{
-		printf("%d ", get_time(philo->var));
-		if (action == RIGHT_FORK)
-			printf("%d has taken right fork\n", philo->index);
-		else if (action == LEFT_FORK)
-			printf("%d has taken left fork\n", philo->index);
-		else if (action == EAT)
-			printf("%d is eating\n", philo->index);
-		else if (action == SLEEP)
-			printf("%d is sleeping\n", philo->index);
-		else if (action == THINK)
-			printf("%d is thinking\n", philo->index);
-		//printf(RESET);
-	}
-	else if (action == DIE)
-	{
-		printf("%d ", get_time(philo->var));
-		printf("%d died\n", philo->index);
-	}
-	pthread_mutex_unlock(&philo->var->std_mutex);
-}
-
 void	sleep_ms(int ms)
 {
 	t_time	t0;

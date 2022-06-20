@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC			    = main.c philo.c utils.c init.c
+SRC			    = main.c philo.c utils.c init.c action.c
 
 SDIR			= src
 HDIR			= include
