@@ -31,6 +31,7 @@ static void wait_for_death(t_var *var)
 		pthread_mutex_lock(&var->end_mutex);
 		if (var->simulation_end)
 		{
+			usleep(1);
 			pthread_mutex_unlock(&var->end_mutex);
 			pthread_mutex_lock(&var->std_mutex);
 			printf("%d ", get_time(var));

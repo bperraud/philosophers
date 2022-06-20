@@ -22,6 +22,20 @@ static int	unlock_after_death(t_philo *philo)
 	}
 }
 
+static void	sleeping(t_philo *philo)
+{
+	print_action(philo, SLEEP);
+	//sleep_ms(philo->var->time_to_sleep, philo->var->simulation_end);
+	sleep_ms(philo->var->time_to_sleep, 0);
+	check_death(philo);
+}
+
+static void	thinking(t_philo *philo)
+{
+	print_action(philo, THINK);
+	check_death(philo);
+}
+
 void	eat(t_philo *philo)
 {
 	if (philo->var->n_must_eat && philo->meal_eaten == philo->var->n_must_eat)
@@ -49,7 +63,7 @@ void	eat(t_philo *philo)
 	print_action(philo, EAT);
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->var);
-	sleep_ms(philo->var->time_to_eat);
+	sleep_ms(philo->var->time_to_eat, 0);
 
 	if (philo->left_fork_index < philo->right_fork_index)
 	{
@@ -69,13 +83,7 @@ void	eat(t_philo *philo)
 	//time to sleep
 	sleeping(philo);
 	//time to think
-	print_action(philo, THINK);
-}
-
-void	sleeping(t_philo *philo)
-{
-	print_action(philo, SLEEP);
-	sleep_ms(philo->var->time_to_sleep);
+	thinking(philo);
 }
 
 void	print_action(t_philo *philo, int action)

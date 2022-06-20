@@ -51,7 +51,7 @@ typedef struct s_var
 	int				time_to_sleep;
 	int				n_must_eat;
 	int				dead_philo_index;
-	atomic_int		simulation_end;
+	int				simulation_end;
 	t_time			t0;
 	pthread_mutex_t	std_mutex;
 	pthread_mutex_t	end_mutex;
@@ -80,7 +80,7 @@ int	philo(int argc, char **argv);
 int		ft_atoi(const char *str);
 t_philo	**free_philos(int index, t_philo **philos);
 t_var	*free_var(t_var *var);
-void	sleep_ms(int ms);
+void	sleep_ms(int ms, int end);
 void	print_action(t_philo *philo, int action);
 int		get_time(t_var *var);
 
@@ -90,8 +90,6 @@ t_philo	**init_philos(t_var *var);
 
 /* philo action */
 void	eat(t_philo *philo);
-void	think(t_philo *philo);
-void	sleeping(t_philo *philo);
 int		check_death(t_philo *philo);
 
 #endif
