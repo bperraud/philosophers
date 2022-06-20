@@ -35,7 +35,8 @@ typedef struct timeval	t_time;
 
 enum
 {
-	FORK,
+	LEFT_FORK,
+	RIGHT_FORK,
 	EAT,
 	SLEEP,
 	THINK,
@@ -52,7 +53,6 @@ typedef struct s_var
 	int				simulation_end;
 	t_time			t0;
 	pthread_mutex_t	std_mutex;
-	pthread_mutex_t end_mutex;
 }					t_var;
 
 typedef struct s_philo
@@ -62,8 +62,8 @@ typedef struct s_philo
 	atomic_int		meal_eaten;
 	atomic_int		dead;
 	pthread_t		thread_id;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	right_fork;
+	pthread_mutex_t	left_fork;
+	pthread_mutex_t	*right_fork;
 	int				left_fork_index;
 	int				right_fork_index;
 	t_var			*var;

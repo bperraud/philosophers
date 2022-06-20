@@ -38,7 +38,10 @@ int	main(int argc, char **argv)
 	i = -1;
 
 	while (i++ < philos[0]->var->n_philo - 1)
+	{
 		pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
+		//sleep_ms(0);
+	}
 	i = -1;
 	while (i++ < philos[0]->var->n_philo - 1)
 		pthread_join(philos[i]->thread_id, NULL);

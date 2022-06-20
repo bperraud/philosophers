@@ -14,24 +14,19 @@
 
 int	check_death(t_philo *philo)
 {
-	//pthread_mutex_lock(&philo->var->end_mutex);
 	if (philo->dead)
 		return (1);
-	//if (philo->var->simulation_end)
-	//{
-	//	//pthread_mutex_unlock(&philo->var->end_mutex);
-	//	return (1);
-	//}
+	if (philo->var->simulation_end)
+	{
+		return (1);
+	}
 	if (get_time(philo->var) - philo->last_meal_time > philo->var->time_to_die)
 	{
 		philo->dead = 1;
 		print_action(philo, DIE);
-		//philo->var->simulation_end = 1;
-		//pthread_mutex_unlock(&philo->var->end_mutex);
-		exit(1);
+		philo->var->simulation_end = 1;
 		return (1);
 	}
-	//pthread_mutex_unlock(&philo->var->end_mutex);
 	return (0);
 }
 
@@ -39,8 +34,8 @@ static int	unlock_after_death(t_philo *philo)
 {
 	if (check_death(philo))
 	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(&philo->right_fork);
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return (1);
 	}
 }
@@ -52,25 +47,33 @@ void	eat(t_philo *philo)
 
 	if (philo->left_fork_index < philo->right_fork_index)
 	{
-		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, FORK);
-		pthread_mutex_lock(&philo->right_fork);
-		print_action(philo, FORK);
+		pthread_mutex_lock(&philo->left_fork);
+		//if (unlock_after_death(philo))
+			//return;
+		print_action(philo, LEFT_FORK);
+		pthread_mutex_lock(philo->right_fork);
+		//if (unlock_after_death(philo))
+			//return;
+		print_action(philo, RIGHT_FORK);
 	}
 	else
 	{
-		pthread_mutex_lock(&philo->right_fork);
-		print_action(philo, FORK);
-		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, FORK);
+		pthread_mutex_lock(philo->right_fork);
+		//if (unlock_after_death(philo))
+			//return;
+		print_action(philo, RIGHT_FORK);
+		pthread_mutex_lock(&philo->left_fork);
+		//if (unlock_after_death(philo))
+			//return;
+		print_action(philo, LEFT_FORK);
 	}
 
 	//time to eat
 	//check death
 	if (check_death(philo))
 	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(&philo->right_fork);
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
 		return ;
 	}
 
@@ -79,8 +82,19 @@ void	eat(t_philo *philo)
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->var);
 
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(&philo->right_fork);
+	if (philo->left_fork_index < philo->right_fork_index)
+	{
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(&philo->left_fork);
+	}
+
+	//pthread_mutex_unlock(philo->left_fork);
+	//pthread_mutex_unlock(&philo->right_fork);
 
 	sleeping(philo);
 	print_action(philo, THINK);
