@@ -50,9 +50,11 @@ typedef struct s_var
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				n_must_eat;
-	int				simulation_end;
+	int				dead_philo_index;
+	atomic_int		simulation_end;
 	t_time			t0;
 	pthread_mutex_t	std_mutex;
+	pthread_mutex_t	end_mutex;
 }					t_var;
 
 typedef struct s_philo
@@ -64,6 +66,8 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	*right_fork;
+	//pthread_mutex_t	left_fork_dirty;
+	//pthread_mutex_t	*right_fork_dirty;
 	int				left_fork_index;
 	int				right_fork_index;
 	t_var			*var;
