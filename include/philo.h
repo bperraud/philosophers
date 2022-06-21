@@ -73,7 +73,7 @@ typedef struct s_philo
 }					t_philo;
 
 /* main */
-int	philo(int argc, char **argv);
+int		philo(int argc, char **argv);
 
 /* utils */
 int		ft_atoi(const char *str);

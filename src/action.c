@@ -12,16 +12,6 @@
 
 # include "philo.h"
 
-static int	unlock_after_death(t_philo *philo)
-{
-	if (check_death(philo))
-	{
-		pthread_mutex_unlock(&philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-		return (1);
-	}
-}
-
 static void	sleeping(t_philo *philo)
 {
 	print_action(philo, SLEEP);
@@ -47,9 +37,6 @@ void	eat(t_philo *philo)
 		pthread_mutex_lock(&philo->left_fork);
 		print_action(philo, LEFT_FORK);
 	}
-
-	if (unlock_after_death(philo))
-		return;
 
 	//time to eat
 	print_action(philo, EAT);
