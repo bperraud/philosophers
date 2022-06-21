@@ -17,6 +17,7 @@ static void	*launch_thread(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
+	usleep(1000);
 	while (!check_death(philo))
 	{
 		eat(philo);
@@ -71,21 +72,14 @@ int	philo(int argc, char **argv)
 	while (i++ < var->n_philo - 1)
 	{
 		if (i%2 == 0)
-		{
 			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
-			usleep(10);
-		}
 	}
-
 
 	i = -1 ;
 	while (i++ < var->n_philo - 1)
 	{
 		if (i%2 != 0)
-		{
 			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
-			usleep(10);
-		}
 	}
 
 	wait_for_death(var, philos);
