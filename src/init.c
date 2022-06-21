@@ -23,13 +23,7 @@ static t_philo	*init_philo(t_var *var, int index)
 	philo->meal_eaten = 0;
 	philo->index = index;
 	philo->var = var;
-	philo->right_fork_index = index;
-	philo->left_dirty = 1;
-	if (index == var->n_philo)
-		philo->left_fork_index = 1;
-	else
-		philo->left_fork_index = index + 1;
-
+	philo->left_dirty = 0;
 	if (pthread_mutex_init(&philo->left_fork, NULL) != 0)
 		return (NULL);
 	return (philo);

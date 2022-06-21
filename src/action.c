@@ -23,25 +23,48 @@ static void	thinking(t_philo *philo)
 	print_action(philo, THINK);
 }
 
+static	int	can_pick_left(t_philo *philo)
+{
+
+	if (philo->var->n_philo % 2 == 1 && philo->index == philo->var->n_philo)
+	{
+		return (philo->left_dirty && !*philo->right_dirty);
+	}
+	if ((philo->index%2 == 0 && philo->left_dirty)
+		|| (philo->index%2 != 0 && !philo->left_dirty))
+	{
+		return (1);
+	}
+	return (0);
+}
+
+static	int	can_pick_right(t_philo *philo)
+{
+	if (philo->var->n_philo % 2 == 1 && philo->index == philo->var->n_philo)
+	{
+		return (philo->left_dirty && !*philo->right_dirty);
+	}
+	if ((philo->index%2 == 0 && *philo->right_dirty)
+		|| (philo->index%2 != 0 && !*philo->right_dirty))
+	{
+		return (1);
+	}
+	return (0);
+}
+
 void	eat(t_philo *philo)
 {
 	if (philo->var->n_must_eat && philo->meal_eaten == philo->var->n_must_eat)
 		return ;
-
-	if (philo->left_fork_index < philo->right_fork_index)
+	if (can_pick_left(philo) && can_pick_right(philo))
 	{
-		pthread_mutex_lock(&philo->left_fork);
-		print_action(philo, LEFT_FORK);
 		pthread_mutex_lock(philo->right_fork);
 		print_action(philo, RIGHT_FORK);
+		pthread_mutex_lock(&philo->left_fork);
+		print_action(philo, LEFT_FORK);
 	}
 	else
-	{
-		pthread_mutex_lock(philo->right_fork);
-		print_action(philo, RIGHT_FORK);
-		pthread_mutex_lock(&philo->left_fork);
-		print_action(philo, LEFT_FORK);
-	}
+		return ;
 
 	//time to eat
 	print_action(philo, EAT);
@@ -49,20 +72,11 @@ void	eat(t_philo *philo)
 	philo->last_meal_time = get_time(philo->var);
 	sleep_ms(philo->var->time_to_eat);
 
-	if (philo->left_fork_index < philo->right_fork_index)
-	{
-		pthread_mutex_unlock(&philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
-	}
-	else
-	{
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(&philo->left_fork);
-	}
-	//finish eating -> give both fork so clean them
+	philo->left_dirty = !philo->left_dirty;
+	*philo->right_dirty = !*philo->right_dirty;
 
-	//pthread_mutex_unlock(philo->left_fork);
-	//pthread_mutex_unlock(&philo->right_fork);
+	pthread_mutex_unlock(&philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 
 	//time to sleep
 	sleeping(philo);

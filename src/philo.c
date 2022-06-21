@@ -70,20 +70,7 @@ int	philo(int argc, char **argv)
 	i = -1;
 	while (i++ < var->n_philo - 1)
 	{
-		if (i%2 == 0)
-		{
-			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
-			usleep(50);
-		}
-	}
-
-	i = 0 ;
-	while (i++ < var->n_philo - 1)
-	{
-		if (i%2 != 0)
-		{
-			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
-		}
+		pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
 	}
 
 	wait_for_death(var, philos);
