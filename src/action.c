@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static void	sleeping(t_philo *philo)
 {
@@ -20,13 +20,12 @@ static void	sleeping(t_philo *philo)
 
 static	int	can_pick_left(t_philo *philo)
 {
-
 	if (philo->var->n_philo % 2 == 1 && philo->index == philo->var->n_philo)
 	{
 		return (philo->left_dirty && !*philo->right_dirty);
 	}
-	if ((philo->index%2 == 0 && philo->left_dirty)
-		|| (philo->index%2 != 0 && !philo->left_dirty))
+	if ((philo->index % 2 == 0 && philo->left_dirty)
+		|| (philo->index % 2 != 0 && !philo->left_dirty))
 	{
 		return (1);
 	}
@@ -39,8 +38,8 @@ static	int	can_pick_right(t_philo *philo)
 	{
 		return (philo->left_dirty && !*philo->right_dirty);
 	}
-	if ((philo->index%2 == 0 && *philo->right_dirty)
-		|| (philo->index%2 != 0 && !*philo->right_dirty))
+	if ((philo->index % 2 == 0 && *philo->right_dirty)
+		|| (philo->index % 2 != 0 && !*philo->right_dirty))
 	{
 		return (1);
 	}
@@ -51,31 +50,21 @@ void	eat(t_philo *philo)
 {
 	if (philo->var->n_must_eat && philo->meal_eaten == philo->var->n_must_eat)
 		return ;
-	if (can_pick_left(philo) && can_pick_right(philo))
-	{
-		pthread_mutex_lock(philo->right_fork);
-		print_action(philo, RIGHT_FORK);
-		pthread_mutex_lock(&philo->left_fork);
-		print_action(philo, LEFT_FORK);
-	}
-	else
+	if (!(can_pick_left(philo) && can_pick_right(philo)))
 		return ;
-
-	//time to eat
+	pthread_mutex_lock(philo->right_fork);
+	print_action(philo, RIGHT_FORK);
+	pthread_mutex_lock(&philo->left_fork);
+	print_action(philo, LEFT_FORK);
 	print_action(philo, EAT);
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->var);
 	sleep_ms(philo->var->time_to_eat);
-
 	philo->left_dirty = !philo->left_dirty;
 	*philo->right_dirty = !*philo->right_dirty;
-
 	pthread_mutex_unlock(&philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-
-	//time to sleep
 	sleeping(philo);
-	//time to think
 	print_action(philo, THINK);
 }
 
@@ -85,7 +74,7 @@ void	print_action(t_philo *philo, int action)
 	if (philo->var->simulation_end)
 	{
 		pthread_mutex_unlock(&philo->var->end_mutex);
-		return;
+		return ;
 	}
 	pthread_mutex_unlock(&philo->var->end_mutex);
 	pthread_mutex_lock(&philo->var->std_mutex);

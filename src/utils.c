@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 int	ft_atoi(const char *str)
 {
@@ -98,5 +98,3 @@ void	sleep_ms(int ms)
 			usleep(ms / 1000 - (time - time0) / 1000000);
 	}
 }
-
-

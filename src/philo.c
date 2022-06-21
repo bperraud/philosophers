@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 static void	*launch_thread(void *arg)
 {
@@ -41,7 +41,7 @@ static void	print_end(t_var *var)
 	pthread_mutex_unlock(&var->end_mutex);
 }
 
-static void wait_for_death(t_var *var, t_philo **philos)
+static void	wait_for_death(t_var *var, t_philo **philos)
 {
 	int	i;
 
@@ -63,7 +63,7 @@ int	philo(int argc, char **argv)
 	t_philo	**philos;
 	t_var	*var;
 
-	var =  init_var(argc, argv);
+	var = init_var(argc, argv);
 	philos = init_philos(var);
 	if (!philos)
 		return (-1);
@@ -72,7 +72,6 @@ int	philo(int argc, char **argv)
 	{
 		pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
 	}
-
 	wait_for_death(var, philos);
 	print_end(var);
 	i = -1;
