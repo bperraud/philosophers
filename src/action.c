@@ -12,12 +12,6 @@
 
 #include "philo.h"
 
-static void	sleeping(t_philo *philo)
-{
-	print_action(philo, SLEEP);
-	sleep_ms(philo->var->time_to_sleep);
-}
-
 static	int	can_pick_left(t_philo *philo)
 {
 	if (philo->var->n_philo % 2 == 1 && philo->index == philo->var->n_philo)
@@ -64,7 +58,8 @@ void	eat(t_philo *philo)
 	*philo->right_dirty = !*philo->right_dirty;
 	pthread_mutex_unlock(&philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	sleeping(philo);
+	print_action(philo, SLEEP);
+	sleep_ms(philo->var->time_to_sleep);
 	print_action(philo, THINK);
 }
 
@@ -91,4 +86,21 @@ void	print_action(t_philo *philo, int action)
 		printf("%s%d is thinking\n", YELLOW, philo->index);
 	printf(RESET);
 	pthread_mutex_unlock(&philo->var->std_mutex);
+}
+
+void	print_end(t_var *var)
+{
+	pthread_mutex_lock(&var->end_mutex);
+	if (var->simulation_end)
+	{
+		usleep(1);
+		pthread_mutex_unlock(&var->end_mutex);
+		pthread_mutex_lock(&var->std_mutex);
+		printf("%d ", get_time(var));
+		printf("%s%d died\n", RED, var->dead_philo_index);
+		printf(RESET);
+		pthread_mutex_unlock(&var->std_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(&var->end_mutex);
 }

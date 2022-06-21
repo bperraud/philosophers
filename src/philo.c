@@ -12,6 +12,25 @@
 
 #include "philo.h"
 
+static int	check_death(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->var->end_mutex);
+	if (philo->var->simulation_end)
+	{
+		pthread_mutex_unlock(&philo->var->end_mutex);
+		return (1);
+	}
+	if (get_time(philo->var) - philo->last_meal_time > philo->var->time_to_die)
+	{
+		philo->var->simulation_end = 1;
+		pthread_mutex_unlock(&philo->var->end_mutex);
+		philo->var->dead_philo_index = philo->index;
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->var->end_mutex);
+	return (0);
+}
+
 static void	*launch_thread(void *arg)
 {
 	t_philo	*philo;
@@ -24,21 +43,20 @@ static void	*launch_thread(void *arg)
 	return (NULL);
 }
 
-static void	print_end(t_var *var)
+static int	satiate(t_var *var, t_philo **philos)
 {
-	pthread_mutex_lock(&var->end_mutex);
-	if (var->simulation_end)
+	int	i;
+
+	i = -1;
+	if (!var->n_must_eat)
+		return (0);
+	while (i++ < var->n_philo - 1)
 	{
-		usleep(1);
-		pthread_mutex_unlock(&var->end_mutex);
-		pthread_mutex_lock(&var->std_mutex);
-		printf("%d ", get_time(var));
-		printf("%s%d died\n", RED, var->dead_philo_index);
-		printf(RESET);
-		pthread_mutex_unlock(&var->std_mutex);
-		return ;
+		if (philos[i]->meal_eaten != var->n_must_eat)
+			return (0);
+		i++;
 	}
-	pthread_mutex_unlock(&var->end_mutex);
+	return (1);
 }
 
 static void	wait_for_death(t_var *var, t_philo **philos)
@@ -54,6 +72,8 @@ static void	wait_for_death(t_var *var, t_philo **philos)
 				return ;
 			i++;
 		}
+		if (satiate(var, philos))
+			return ;
 	}
 }
 
@@ -80,23 +100,4 @@ int	philo(int argc, char **argv)
 	free(var);
 	free_philos(var->n_philo, philos);
 	return (1);
-}
-
-int	check_death(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->var->end_mutex);
-	if (philo->var->simulation_end)
-	{
-		pthread_mutex_unlock(&philo->var->end_mutex);
-		return (1);
-	}
-	if (get_time(philo->var) - philo->last_meal_time > philo->var->time_to_die)
-	{
-		philo->var->simulation_end = 1;
-		pthread_mutex_unlock(&philo->var->end_mutex);
-		philo->var->dead_philo_index = philo->index;
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->var->end_mutex);
-	return (0);
 }

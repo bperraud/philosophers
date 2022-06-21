@@ -87,6 +87,6 @@ t_philo	**init_philos(t_var *var);
 
 /* philo action */
 void	eat(t_philo *philo);
-int		check_death(t_philo *philo);
+void	print_end(t_var *var);
 
 #endif
