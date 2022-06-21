@@ -26,13 +26,6 @@ static void	sleeping(t_philo *philo)
 {
 	print_action(philo, SLEEP);
 	sleep_ms(philo->var->time_to_sleep);
-	check_death(philo);
-}
-
-static void	thinking(t_philo *philo)
-{
-	print_action(philo, THINK);
-	check_death(philo);
 }
 
 void	eat(t_philo *philo)
@@ -82,7 +75,7 @@ void	eat(t_philo *philo)
 	//time to sleep
 	sleeping(philo);
 	//time to think
-	thinking(philo);
+	print_action(philo, THINK);
 }
 
 void	print_action(t_philo *philo, int action)
