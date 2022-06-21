@@ -18,6 +18,11 @@ static void	sleeping(t_philo *philo)
 	sleep_ms(philo->var->time_to_sleep);
 }
 
+static void	thinking(t_philo *philo)
+{
+	print_action(philo, THINK);
+}
+
 void	eat(t_philo *philo)
 {
 	if (philo->var->n_must_eat && philo->meal_eaten == philo->var->n_must_eat)
@@ -62,7 +67,7 @@ void	eat(t_philo *philo)
 	//time to sleep
 	sleeping(philo);
 	//time to think
-	print_action(philo, THINK);
+	thinking(philo);
 }
 
 void	print_action(t_philo *philo, int action)

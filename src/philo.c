@@ -69,11 +69,27 @@ int	philo(int argc, char **argv)
 		return (-1);
 	i = -1;
 	while (i++ < var->n_philo - 1)
-		pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
+	{
+		if (i%2 == 0)
+		{
+			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
+			usleep(10);
+		}
+	}
+
+
+	i = -1 ;
+	while (i++ < var->n_philo - 1)
+	{
+		if (i%2 != 0)
+		{
+			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
+			usleep(10);
+		}
+	}
 
 	wait_for_death(var, philos);
 	print_end(var);
-
 	i = -1;
 	while (i++ < var->n_philo - 1)
 		pthread_join(philos[i]->thread_id, NULL);
@@ -90,14 +106,13 @@ int	check_death(t_philo *philo)
 		pthread_mutex_unlock(&philo->var->end_mutex);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->var->end_mutex);
 	if (get_time(philo->var) - philo->last_meal_time > philo->var->time_to_die)
 	{
-		pthread_mutex_lock(&philo->var->end_mutex);
 		philo->var->simulation_end = 1;
 		pthread_mutex_unlock(&philo->var->end_mutex);
 		philo->var->dead_philo_index = philo->index;
 		return (1);
 	}
+	pthread_mutex_unlock(&philo->var->end_mutex);
 	return (0);
 }
