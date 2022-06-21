@@ -18,11 +18,6 @@ static void	sleeping(t_philo *philo)
 	sleep_ms(philo->var->time_to_sleep);
 }
 
-static void	thinking(t_philo *philo)
-{
-	print_action(philo, THINK);
-}
-
 static	int	can_pick_left(t_philo *philo)
 {
 
@@ -81,12 +76,11 @@ void	eat(t_philo *philo)
 	//time to sleep
 	sleeping(philo);
 	//time to think
-	thinking(philo);
+	print_action(philo, THINK);
 }
 
 void	print_action(t_philo *philo, int action)
 {
-	/*
 	pthread_mutex_lock(&philo->var->end_mutex);
 	if (philo->var->simulation_end)
 	{
@@ -94,7 +88,6 @@ void	print_action(t_philo *philo, int action)
 		return;
 	}
 	pthread_mutex_unlock(&philo->var->end_mutex);
-	*/
 	pthread_mutex_lock(&philo->var->std_mutex);
 	printf("%d ", get_time(philo->var));
 	if (action == RIGHT_FORK)
