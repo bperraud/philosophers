@@ -77,7 +77,7 @@ int	get_time(t_var *var)
 	return (s - s0 + ms - ms0);
 }
 
-void	sleep_ms(int ms, int end)
+void	sleep_ms(int ms)
 {
 	t_time	t0;
 	t_time	t;
@@ -88,7 +88,7 @@ void	sleep_ms(int ms, int end)
 	gettimeofday(&t, NULL);
 	time0 = t0.tv_sec * 1000000 + t0.tv_usec;
 	time = t.tv_sec * 1000000 + t.tv_usec;
-	while (time - time0 < ms * 1000 && !end)
+	while (time - time0 < ms * 1000)
 	{
 		gettimeofday(&t, NULL);
 		time = t.tv_sec * 1000000 + t.tv_usec;

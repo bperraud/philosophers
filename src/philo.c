@@ -24,23 +24,36 @@ static void	*launch_thread(void *arg)
 	return (NULL);
 }
 
-static void wait_for_death(t_var *var)
+static void	print_end(t_var *var)
 {
+	pthread_mutex_lock(&var->end_mutex);
+	if (var->simulation_end)
+	{
+		usleep(1);
+		pthread_mutex_unlock(&var->end_mutex);
+		pthread_mutex_lock(&var->std_mutex);
+		printf("%d ", get_time(var));
+		printf("%s%d died\n", RED, var->dead_philo_index);
+		printf(RESET);
+		pthread_mutex_unlock(&var->std_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(&var->end_mutex);
+}
+
+static void wait_for_death(t_var *var, t_philo **philos)
+{
+	int	i;
+
 	while (1)
 	{
-		pthread_mutex_lock(&var->end_mutex);
-		if (var->simulation_end)
+		i = -1;
+		while (i++ < var->n_philo - 1)
 		{
-			usleep(1);
-			pthread_mutex_unlock(&var->end_mutex);
-			pthread_mutex_lock(&var->std_mutex);
-			printf("%d ", get_time(var));
-			printf("%s%d died\n", RED, var->dead_philo_index);
-			printf(RESET);
-			pthread_mutex_unlock(&var->std_mutex);
-			break;
+			if (check_death(philos[i]))
+				return ;
+			i++;
 		}
-		pthread_mutex_unlock(&var->end_mutex);
 	}
 }
 
@@ -58,7 +71,8 @@ int	philo(int argc, char **argv)
 	while (i++ < var->n_philo - 1)
 		pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
 
-	wait_for_death(var);
+	wait_for_death(var, philos);
+	print_end(var);
 
 	i = -1;
 	while (i++ < var->n_philo - 1)

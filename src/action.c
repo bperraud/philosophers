@@ -25,8 +25,7 @@ static int	unlock_after_death(t_philo *philo)
 static void	sleeping(t_philo *philo)
 {
 	print_action(philo, SLEEP);
-	//sleep_ms(philo->var->time_to_sleep, philo->var->simulation_end);
-	sleep_ms(philo->var->time_to_sleep, 0);
+	sleep_ms(philo->var->time_to_sleep);
 	check_death(philo);
 }
 
@@ -63,7 +62,7 @@ void	eat(t_philo *philo)
 	print_action(philo, EAT);
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->var);
-	sleep_ms(philo->var->time_to_eat, 0);
+	sleep_ms(philo->var->time_to_eat);
 
 	if (philo->left_fork_index < philo->right_fork_index)
 	{

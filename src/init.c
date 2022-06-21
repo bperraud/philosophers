@@ -21,7 +21,6 @@ static t_philo	*init_philo(t_var *var, int index)
 		return (NULL);
 	philo->last_meal_time = get_time(var);
 	philo->meal_eaten = 0;
-	philo->dead = 0;
 	philo->index = index;
 	philo->var = var;
 	philo->right_fork_index = index;
