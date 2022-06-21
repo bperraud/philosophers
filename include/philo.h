@@ -65,8 +65,8 @@ typedef struct s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	*right_fork;
-	//pthread_mutex_t	left_fork_dirty;
-	//pthread_mutex_t	*right_fork_dirty;
+	atomic_int		left_dirty;
+	atomic_int		*right_dirty;
 	int				left_fork_index;
 	int				right_fork_index;
 	t_var			*var;

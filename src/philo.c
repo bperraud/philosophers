@@ -73,18 +73,16 @@ int	philo(int argc, char **argv)
 		if (i%2 == 0)
 		{
 			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
-			usleep(10);
+			usleep(50);
 		}
 	}
 
-
-	i = -1 ;
+	i = 0 ;
 	while (i++ < var->n_philo - 1)
 	{
 		if (i%2 != 0)
 		{
 			pthread_create(&(philos[i]->thread_id), NULL, launch_thread, philos[i]);
-			usleep(10);
 		}
 	}
 

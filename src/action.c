@@ -72,6 +72,7 @@ void	eat(t_philo *philo)
 
 void	print_action(t_philo *philo, int action)
 {
+	/*
 	pthread_mutex_lock(&philo->var->end_mutex);
 	if (philo->var->simulation_end)
 	{
@@ -79,6 +80,7 @@ void	print_action(t_philo *philo, int action)
 		return;
 	}
 	pthread_mutex_unlock(&philo->var->end_mutex);
+	*/
 	pthread_mutex_lock(&philo->var->std_mutex);
 	printf("%d ", get_time(philo->var));
 	if (action == RIGHT_FORK)

@@ -24,12 +24,12 @@ static t_philo	*init_philo(t_var *var, int index)
 	philo->index = index;
 	philo->var = var;
 	philo->right_fork_index = index;
-	//philo->left_fork_dirty = 1;
-	//philo->right_fork_dirty = 1;
+	philo->left_dirty = 1;
 	if (index == var->n_philo)
 		philo->left_fork_index = 1;
 	else
 		philo->left_fork_index = index + 1;
+
 	if (pthread_mutex_init(&philo->left_fork, NULL) != 0)
 		return (NULL);
 	return (philo);
@@ -50,10 +50,14 @@ t_philo	**init_philos(t_var *var)
 		if (!philos[i])
 			return (free_philos(i, philos));
 		if (i != 0)
+		{
 			philos[i]->right_fork = &(philos[i - 1]->left_fork);
+			philos[i]->right_dirty = &(philos[i - 1]->left_dirty);
+		}
 		i++;
 	}
 	philos[0]->right_fork = &(philos[i - 1]->left_fork);
+	philos[0]->right_dirty = &(philos[i - 1]->left_dirty);
 	return (philos);
 }
 
