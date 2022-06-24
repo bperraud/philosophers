@@ -19,8 +19,7 @@ ODIR			= objs
 OBJ	  			= $(addprefix $(ODIR)/, $(SRC:.c=.o))
 
 CC				= gcc
-#CFLAGS			= -Wall -Wextra -Werror -Iinclude
-CFLAGS			= -Iinclude
+CFLAGS			= -Wall -Wextra -Werror -Iinclude
 RM				= rm -f
 
 NAME			= philo
