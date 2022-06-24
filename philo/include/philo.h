@@ -42,7 +42,7 @@ enum
 	DIE
 };
 
-typedef struct s_var
+typedef struct s_table
 {
 	int				n_philo;
 	int				time_to_die;
@@ -54,7 +54,7 @@ typedef struct s_var
 	t_time			t0;
 	pthread_mutex_t	std_mutex;
 	pthread_mutex_t	end_mutex;
-}					t_var;
+}					t_table;
 
 typedef struct s_philo
 {
@@ -66,7 +66,7 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;
 	atomic_int		left_dirty;
 	atomic_int		*right_dirty;
-	t_var			*var;
+	t_table			*table;
 }					t_philo;
 
 /* main */
@@ -75,17 +75,17 @@ int		philo(int argc, char **argv);
 /* utils */
 int		ft_atoi(const char *str);
 t_philo	**free_philos(int index, t_philo **philos);
-t_var	*free_var(t_var *var);
+t_table	*free_table(t_table *table);
 void	sleep_ms(int ms);
 void	print_action(t_philo *philo, int action);
-int		get_time(t_var *var);
+int		get_time(t_table *table);
 
 /* init */
-t_var	*init_var(int argc, char **argv);
-t_philo	**init_philos(t_var *var);
+t_table	*init_table(int argc, char **argv);
+t_philo	**init_philos(t_table *table);
 
 /* philo action */
 void	eat(t_philo *philo);
-void	print_end(t_var *var);
+void	print_end(t_table *table);
 
 #endif
