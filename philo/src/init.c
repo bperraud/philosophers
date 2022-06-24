@@ -34,6 +34,8 @@ t_philo	**init_philos(t_var *var)
 	t_philo	**philos;
 	int		i;
 
+	if (!var)
+		return (NULL);
 	philos = malloc(sizeof(t_philo *) * var->n_philo);
 	if (!philos)
 		return (NULL);
