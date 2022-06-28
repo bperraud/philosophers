@@ -43,6 +43,7 @@ static void	*launch_thread(void *arg)
 	return (NULL);
 }
 
+/*
 static int	satiate(t_table *table, t_philo **philos)
 {
 	int	i;
@@ -58,6 +59,7 @@ static int	satiate(t_table *table, t_philo **philos)
 	}
 	return (1);
 }
+*/
 
 static void	wait_for_death(t_table *table, t_philo **philos)
 {
@@ -72,25 +74,28 @@ static void	wait_for_death(t_table *table, t_philo **philos)
 				return ;
 			i++;
 		}
+		/*
 		if (satiate(table, philos))
 			return ;
+			*/
 	}
 }
 
 static void	new_philo(int index, t_table *table)
 {
 	t_philo	*philo;
+	pid_t	pid;
 
-	table->philo_pid[index - 1] = fork();
-	if (table->philo_pid[index - 1] == 0)	//child
+	pid = fork();
+	if (pid == 0)
 	{
 		philo = init_philo(index, table);
 		while (!check_death(philo))
 		{
 			eat(philo);
 		}
+		exit(0);
 	}
-	exit(1);
 	return ;
 }
 
@@ -109,6 +114,9 @@ int	philo(int argc, char **argv)
 	}
 
 	//wait_for_death(table, philos);
+
+	while (wait(NULL) > 0)
+		;
 
 	print_end(table);
 	free(table->philo_pid);

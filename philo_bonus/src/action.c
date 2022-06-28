@@ -71,5 +71,12 @@ void	print_end(t_table *table)
 		sem_post(table->sem_print);
 		return ;
 	}
+
+	sem_wait(table->sem_print);
+	printf("%d ", get_time(table));
+	printf("%s%d died\n", RED, table->dead_philo_index);
+	printf(RESET);
+	sem_post(table->sem_print);
+
 	sem_post(table->sem_end);
 }

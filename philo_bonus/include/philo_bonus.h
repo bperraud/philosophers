@@ -23,6 +23,7 @@
 # include <stdatomic.h>
 # include <semaphore.h>
 # include <fcntl.h>
+# include <wait.h>
 
 # define BLACK "\e[0;30m"
 # define RED "\e[0;31m"
