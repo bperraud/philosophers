@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 static int	check_death(t_philo *philo)
 {
@@ -93,6 +93,7 @@ static void	new_philo(int index, t_table *table)
 			eat(philo);
 		}
 	}
+	exit(1);
 	return ;
 }
 
@@ -104,15 +105,15 @@ int	philo(int argc, char **argv)
 	table = init_table(argc, argv);
 	if (!table)
 		return (-1);
-	i = -1;
-	while (i++ < table->n_philo - 1)
+	i = 0;
+	while (i++ < table->n_philo)
 	{
 		new_philo(i, table);
 	}
 	//wait_for_death(table, philos);
+
+
 	print_end(table);
-
-
 
 	free(table);
 	return (1);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 t_philo	*init_philo(int index, t_table *table)
 {
@@ -34,8 +34,7 @@ int	setup_semaphores(t_table *table)
 	table->sem_print = sem_open("sem_print", O_CREAT | O_EXCL, 0644, 1);
 	if (table->sem_print == SEM_FAILED)
 		exit(EXIT_FAILURE);
-	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644,
-			table->n_philo);
+	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644, table->n_philo);
 	if (table->sem_forks == SEM_FAILED)
 		exit(EXIT_FAILURE);
 	table->sem_dead = sem_open("sem_dead", O_CREAT | O_EXCL, 0644, 1);
