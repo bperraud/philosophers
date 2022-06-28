@@ -16,7 +16,6 @@ void	eat(t_philo *philo)
 {
 	if (philo->table->n_must_eat && philo->meal_eaten == philo->table->n_must_eat)
 		return ;
-
 	sem_wait(philo->table->sem_forks);
 	print_action(philo, FORK);
 	sem_wait(philo->table->sem_forks);
@@ -36,15 +35,14 @@ void	eat(t_philo *philo)
 
 void	print_action(t_philo *philo, int action)
 {
-	/*
-	pthread_mutex_lock(&philo->table->end_mutex);
+	sem_wait(philo->table->sem_end);
 	if (philo->table->simulation_end)
 	{
-		pthread_mutex_unlock(&philo->table->end_mutex);
+		sem_post(philo->table->sem_end);
 		return ;
 	}
-	pthread_mutex_unlock(&philo->table->end_mutex);
-	*/
+	sem_post(philo->table->sem_end);
+
 	sem_wait(philo->table->sem_print);
 	printf("%d ", get_time(philo->table));
 	if (action == FORK)
@@ -61,17 +59,17 @@ void	print_action(t_philo *philo, int action)
 
 void	print_end(t_table *table)
 {
-	//pthread_mutex_lock(&table->end_mutex);
+	sem_wait(table->sem_end);
 	if (table->simulation_end)
 	{
 		usleep(1);
-		//pthread_mutex_unlock(&table->end_mutex);
-		//pthread_mutex_lock(&table->std_mutex);
+		sem_post(table->sem_end);
+		sem_wait(table->sem_print);
 		printf("%d ", get_time(table));
-		//printf("%s%d died\n", RED, table->dead_philo_index);
+		printf("%s%d died\n", RED, table->dead_philo_index);
 		printf(RESET);
-		//pthread_mutex_unlock(&table->std_mutex);
+		sem_post(table->sem_print);
 		return ;
 	}
-	//pthread_mutex_unlock(&table->end_mutex);
+	sem_post(table->sem_end);
 }

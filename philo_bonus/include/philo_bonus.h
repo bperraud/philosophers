@@ -53,12 +53,12 @@ typedef struct s_table
 	int				time_to_sleep;
 	int				n_must_eat;
 	int				simulation_end;
+	int				dead_philo_index;
 	t_time			t0;
-	//pthread_mutex_t	std_mutex;
-	//pthread_mutex_t	end_mutex;
 	sem_t			*sem_print;
 	sem_t			*sem_forks;
-	sem_t			*sem_dead;
+	sem_t			*sem_end;
+	int				*philo_pid;
 }					t_table;
 
 typedef struct s_philo

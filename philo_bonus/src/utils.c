@@ -40,20 +40,6 @@ int	ft_atoi(const char *str)
 	return ((int)(res * neg));
 }
 
-t_philo	**free_philos(int index, t_philo **philos)
-{
-	int	i;
-
-	i = 0;
-	while (i < index)
-	{
-		free(philos[i]);
-		i++;
-	}
-	free(philos);
-	return (NULL);
-}
-
 t_table	*free_table(t_table *table)
 {
 	free(table);

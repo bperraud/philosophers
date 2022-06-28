@@ -14,22 +14,20 @@
 
 static int	check_death(t_philo *philo)
 {
-	/*
-	pthread_mutex_lock(&philo->table->end_mutex);
+	sem_wait(philo->table->sem_end);
 	if (philo->table->simulation_end)
 	{
-		pthread_mutex_unlock(&philo->table->end_mutex);
+		sem_post(philo->table->sem_end);
 		return (1);
 	}
 	if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
 	{
 		philo->table->simulation_end = 1;
-		pthread_mutex_unlock(&philo->table->end_mutex);
+		sem_post(philo->table->sem_end);
 		philo->table->dead_philo_index = philo->index;
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->table->end_mutex);
-	*/
+	sem_post(philo->table->sem_end);
 	return (0);
 }
 
@@ -82,10 +80,9 @@ static void	wait_for_death(t_table *table, t_philo **philos)
 static void	new_philo(int index, t_table *table)
 {
 	t_philo	*philo;
-	pid_t	pid;
 
-	pid = fork();
-	if (pid == 0)	//child
+	table->philo_pid[index - 1] = fork();
+	if (table->philo_pid[index - 1] == 0)	//child
 	{
 		philo = init_philo(index, table);
 		while (!check_death(philo))
@@ -110,11 +107,11 @@ int	philo(int argc, char **argv)
 	{
 		new_philo(i, table);
 	}
+
 	//wait_for_death(table, philos);
 
-
 	print_end(table);
-
+	free(table->philo_pid);
 	free(table);
 	return (1);
 }
