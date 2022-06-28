@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	ft_atoi(const char *str)
 {
@@ -40,27 +40,13 @@ int	ft_atoi(const char *str)
 	return ((int)(res * neg));
 }
 
-t_philo	**free_philos(int index, t_philo **philos)
+t_table	*free_table(t_table *table)
 {
-	int	i;
-
-	i = 0;
-	while (i < index)
-	{
-		free(philos[i]);
-		i++;
-	}
-	free(philos);
+	free(table);
 	return (NULL);
 }
 
-t_var	*free_var(t_var *var)
-{
-	free(var);
-	return (NULL);
-}
-
-int	get_time(t_var *var)
+int	get_time(t_table *table)
 {
 	t_time	t;
 	int		s;
@@ -72,8 +58,8 @@ int	get_time(t_var *var)
 		return (0);
 	s = t.tv_sec * 1000;
 	ms = t.tv_usec / 1000;
-	s0 = var->t0.tv_sec * 1000;
-	ms0 = var->t0.tv_usec / 1000;
+	s0 = table->t0.tv_sec * 1000;
+	ms0 = table->t0.tv_usec / 1000;
 	return (s - s0 + ms - ms0);
 }
 

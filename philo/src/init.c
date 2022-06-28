@@ -12,35 +12,37 @@
 
 #include "philo.h"
 
-static t_philo	*init_philo(t_var *var, int index)
+static t_philo	*init_philo(t_table *table, int index)
 {
 	t_philo	*philo;
 
 	philo = malloc(sizeof(t_philo));
 	if (!philo)
 		return (NULL);
-	philo->last_meal_time = get_time(var);
+	philo->last_meal_time = get_time(table);
 	philo->meal_eaten = 0;
 	philo->index = index;
-	philo->var = var;
+	philo->table = table;
 	philo->left_dirty = 0;
 	if (pthread_mutex_init(&philo->left_fork, NULL) != 0)
 		return (NULL);
 	return (philo);
 }
 
-t_philo	**init_philos(t_var *var)
+t_philo	**init_philos(t_table *table)
 {
 	t_philo	**philos;
 	int		i;
 
-	philos = malloc(sizeof(t_philo *) * var->n_philo);
+	if (!table)
+		return (NULL);
+	philos = malloc(sizeof(t_philo *) * table->n_philo);
 	if (!philos)
 		return (NULL);
 	i = 0;
-	while (i < var->n_philo)
+	while (i < table->n_philo)
 	{
-		philos[i] = init_philo(var, i + 1);
+		philos[i] = init_philo(table, i + 1);
 		if (!philos[i])
 			return (free_philos(i, philos));
 		if (i != 0)
@@ -55,28 +57,28 @@ t_philo	**init_philos(t_var *var)
 	return (philos);
 }
 
-t_var	*init_var(int argc, char **argv)
+t_table	*init_table(int argc, char **argv)
 {
-	t_var	*var;
+	t_table	*table;
 
-	var = malloc(sizeof(t_var));
-	if (!var)
+	table = malloc(sizeof(t_table));
+	if (!table)
 		return (NULL);
-	var->n_philo = ft_atoi(argv[1]);
-	var->time_to_die = ft_atoi(argv[2]);
-	var->time_to_eat = ft_atoi(argv[3]);
-	var->time_to_sleep = ft_atoi(argv[4]);
-	var->simulation_end = 0;
+	table->n_philo = ft_atoi(argv[1]);
+	table->time_to_die = ft_atoi(argv[2]);
+	table->time_to_eat = ft_atoi(argv[3]);
+	table->time_to_sleep = ft_atoi(argv[4]);
+	table->simulation_end = 0;
 	if (argc == 6)
-		var->n_must_eat = ft_atoi(argv[5]);
+		table->n_must_eat = ft_atoi(argv[5]);
 	else
-		var->n_must_eat = 0;
-	if (var->n_philo <= 0 || var->time_to_die < 0
-		|| var->time_to_eat < 0 || var->time_to_sleep < 0)
-		return (free_var(var));
-	if (pthread_mutex_init(&var->std_mutex, NULL) != 0
-		|| pthread_mutex_init(&var->end_mutex, NULL) != 0)
+		table->n_must_eat = 0;
+	if (table->n_philo <= 0 || table->time_to_die < 0
+		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
+		return (free_table(table));
+	if (pthread_mutex_init(&table->std_mutex, NULL) != 0
+		|| pthread_mutex_init(&table->end_mutex, NULL) != 0)
 		return (NULL);
-	gettimeofday(&var->t0, NULL);
-	return (var);
+	gettimeofday(&table->t0, NULL);
+	return (table);
 }
