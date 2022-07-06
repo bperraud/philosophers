@@ -35,7 +35,8 @@ int	setup_semaphores(t_table *table)
 	table->sem_print = sem_open("sem_print", O_CREAT | O_EXCL, 0644, 1);
 	if (table->sem_print == SEM_FAILED)
 		exit(EXIT_FAILURE);
-	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644, table->n_philo / 2);
+	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644,
+			table->n_philo / 2);
 	if (table->sem_forks == SEM_FAILED)
 		exit(EXIT_FAILURE);
 	table->sem_end = sem_open("sem_end", O_CREAT | O_EXCL, 0644, 1);

@@ -19,14 +19,10 @@ static void	*check_death(void *arg)
 	philo = (t_philo *) arg;
 	while (1)
 	{
-		if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
+		if (get_time(philo->table) - philo->last_meal_time
+			> philo->table->time_to_die)
 		{
-			//sem_wait(philo->table->sem_print);
-			//printf("DEATH %d \n", get_time(philo->table));
-			//sem_wait(philo->table->sem_end);
 			philo->simulation_end = 1;
-			//sem_post(philo->table->sem_end);
-			//sem_post(philo->table->sem_print);
 			exit(philo->index);
 		}
 		sem_post(philo->table->sem_end);
@@ -51,9 +47,7 @@ static void	new_philo(int index, t_table *table)
 			sem_post(philo->table->sem_end);
 			eat(philo);
 			if (philo->meal_eaten == philo->table->n_must_eat)
-			{
 				exit(0);
-			}
 			sem_wait(philo->table->sem_end);
 		}
 		sem_post(philo->table->sem_end);

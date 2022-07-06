@@ -20,7 +20,8 @@ static int	check_death(t_philo *philo)
 		pthread_mutex_unlock(&philo->table->end_mutex);
 		return (1);
 	}
-	if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
+	if (get_time(philo->table) - philo->last_meal_time
+		> philo->table->time_to_die)
 	{
 		philo->table->simulation_end = 1;
 		pthread_mutex_unlock(&philo->table->end_mutex);

@@ -42,7 +42,8 @@ static	int	can_pick_right(t_philo *philo)
 
 void	eat(t_philo *philo)
 {
-	if (philo->table->n_must_eat && philo->meal_eaten == philo->table->n_must_eat)
+	if (philo->table->n_must_eat
+		&& philo->meal_eaten == philo->table->n_must_eat)
 		return ;
 	if (!(can_pick_left(philo) && can_pick_right(philo)))
 		return ;
