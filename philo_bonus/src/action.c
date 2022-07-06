@@ -14,8 +14,6 @@
 
 void	eat(t_philo *philo)
 {
-	if (philo->table->n_must_eat && philo->meal_eaten == philo->table->n_must_eat)
-		return ;
 	sem_wait(philo->table->sem_forks);
 	print_action(philo, FORK);
 	sem_wait(philo->table->sem_forks);
@@ -57,26 +55,17 @@ void	print_action(t_philo *philo, int action)
 	sem_post(philo->table->sem_print);
 }
 
-void	print_end(t_table *table)
+void	print_end(int dead_philo, t_table *table)
 {
-	sem_wait(table->sem_end);
-	if (table->simulation_end)
+	if (!dead_philo)
 	{
-		usleep(1);
-		sem_post(table->sem_end);
-		sem_wait(table->sem_print);
-		printf("%d ", get_time(table));
-		printf("%s%d died\n", RED, table->dead_philo_index);
-		printf(RESET);
-		sem_post(table->sem_print);
 		return ;
 	}
-
+	sem_post(table->sem_end);
+	usleep(1);
 	sem_wait(table->sem_print);
 	printf("%d ", get_time(table));
-	printf("%s%d died\n", RED, table->dead_philo_index);
+	printf("%s%d died\n", RED, dead_philo);
 	printf(RESET);
 	sem_post(table->sem_print);
-
-	sem_post(table->sem_end);
 }

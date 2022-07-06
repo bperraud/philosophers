@@ -24,8 +24,8 @@ static int	check_death(t_philo *philo)
 	{
 		philo->table->simulation_end = 1;
 		sem_post(philo->table->sem_end);
-		philo->table->dead_philo_index = philo->index;
-		return (1);
+		exit(philo->index);
+		exit(42);
 	}
 	sem_post(philo->table->sem_end);
 	return (0);
@@ -93,6 +93,8 @@ static void	new_philo(int index, t_table *table)
 		while (!check_death(philo))
 		{
 			eat(philo);
+			if (philo->meal_eaten == philo->table->n_must_eat)
+				break ;
 		}
 		exit(0);
 	}
@@ -102,6 +104,8 @@ static void	new_philo(int index, t_table *table)
 int	philo(int argc, char **argv)
 {
 	int		i;
+	int		status;
+	int		dead_philo;
 	t_table	*table;
 
 	table = init_table(argc, argv);
@@ -115,10 +119,11 @@ int	philo(int argc, char **argv)
 
 	//wait_for_death(table, philos);
 
-	while (wait(NULL) > 0)
+	waitpid(-1, &status, 0);
+	dead_philo = WEXITSTATUS(status);
+	while( wait(NULL) > 0)
 		;
-
-	print_end(table);
+	print_end(dead_philo, table);
 	free(table->philo_pid);
 	free(table);
 	return (1);

@@ -23,7 +23,7 @@
 # include <stdatomic.h>
 # include <semaphore.h>
 # include <fcntl.h>
-# include <wait.h>
+# include <sys/wait.h>
 
 # define BLACK "\e[0;30m"
 # define RED "\e[0;31m"
@@ -54,7 +54,6 @@ typedef struct s_table
 	int				time_to_sleep;
 	int				n_must_eat;
 	int				simulation_end;
-	int				dead_philo_index;
 	t_time			t0;
 	sem_t			*sem_print;
 	sem_t			*sem_forks;
@@ -87,6 +86,6 @@ t_philo	*init_philo(int index, t_table *table);
 
 /* philo action */
 void	eat(t_philo *philo);
-void	print_end(t_table *table);
+void	print_end(int dead_philo, t_table *table);
 
 #endif
