@@ -34,7 +34,7 @@ int	setup_semaphores(t_table *table)
 	table->sem_print = sem_open("sem_print", O_CREAT | O_EXCL, 0644, 1);
 	if (table->sem_print == SEM_FAILED)
 		exit(EXIT_FAILURE);
-	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644, table->n_philo);
+	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644, table->n_philo / 2);
 	if (table->sem_forks == SEM_FAILED)
 		exit(EXIT_FAILURE);
 	table->sem_end = sem_open("sem_end", O_CREAT | O_EXCL, 0644, 1);
@@ -61,6 +61,9 @@ t_table	*init_table(int argc, char **argv)
 		table->n_must_eat = 0;
 	if (table->n_philo <= 0 || table->time_to_die < 0
 		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
+		return (free_table(table));
+	table->philo_pid = malloc(sizeof(int) * table->n_philo);
+	if (!table->philo_pid)
 		return (free_table(table));
 	setup_semaphores(table);
 	gettimeofday(&table->t0, NULL);

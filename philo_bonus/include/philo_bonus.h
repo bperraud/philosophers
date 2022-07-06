@@ -53,7 +53,7 @@ typedef struct s_table
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				n_must_eat;
-	//int				simulation_end;
+	int				simulation_end;	// mettre dans philo
 	t_time			t0;
 	sem_t			*sem_print;
 	sem_t			*sem_forks;

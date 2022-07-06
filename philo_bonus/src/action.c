@@ -16,13 +16,11 @@ void	eat(t_philo *philo)
 {
 	sem_wait(philo->table->sem_forks);
 	print_action(philo, FORK);
-	sem_wait(philo->table->sem_forks);
 	print_action(philo, FORK);
 	print_action(philo, EAT);
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->table);
 	sleep_ms(philo->table->time_to_eat);
-	sem_post(philo->table->sem_forks);
 	sem_post(philo->table->sem_forks);
 	if (philo->meal_eaten == philo->table->n_must_eat)
 		return ;
@@ -53,7 +51,6 @@ void	print_end(int dead_philo, t_table *table)
 	{
 		return ;
 	}
-	sem_post(table->sem_end);
 	usleep(1);
 	sem_wait(table->sem_print);
 	printf("%d ", get_time(table));

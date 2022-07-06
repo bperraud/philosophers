@@ -12,52 +12,27 @@
 
 #include "philo_bonus.h"
 
-static int	check_death(t_philo *philo)
-{
-	if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
-	{
-		exit(philo->index);
-	}
-	return 0;
-}
-
-static void	*launch_thread(void *arg)
+static void	*check_death(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
 	while (1)
 	{
-		usleep(50);
 		if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
 		{
+			//sem_wait(philo->table->sem_print);
+			//printf("DEATH %d \n", get_time(philo->table));
+			sem_wait(philo->table->sem_end);
+			philo->table->simulation_end = 1;
+			sem_post(philo->table->sem_end);
+			//sem_post(philo->table->sem_print);
 			exit(philo->index);
 		}
+		sem_post(philo->table->sem_end);
 	}
 	return (NULL);
 }
-
-/*
-static void	wait_for_death(t_table *table, t_philo **philos)
-{
-	int	i;
-
-	while (1)
-	{
-		i = -1;
-		while (i++ < table->n_philo - 1)
-		{
-			if (check_death(philos[i]))
-				return ;
-			i++;
-		}
-
-		if (satiate(table, philos))
-			return ;
-
-	}
-}
-*/
 
 static void	new_philo(int index, t_table *table)
 {
@@ -65,20 +40,39 @@ static void	new_philo(int index, t_table *table)
 	pid_t	pid;
 
 	pid = fork();
+	table->philo_pid[index - 1] = pid;
 	if (pid == 0)
 	{
 		philo = init_philo(index, table);
-		pthread_create(&philo->thread, NULL, launch_thread, philo);
-		//while (!check_death(philo))
-		while (1)
+		pthread_create(&philo->thread, NULL, check_death, philo);
+		sem_wait(philo->table->sem_end);
+		while (!table->simulation_end)
 		{
+			sem_post(philo->table->sem_end);
 			eat(philo);
 			if (philo->meal_eaten == philo->table->n_must_eat)
-				break ;
+			{
+				sem_post(philo->table->sem_end);
+				exit(0);
+			}
+			sem_wait(philo->table->sem_end);
 		}
-		exit(0);
+		sem_post(philo->table->sem_end);
+		exit(philo->index);
 	}
 	return ;
+}
+
+static void	kill_all(t_table *table)
+{
+	int	i;
+
+	i = -1;
+	while (++i < table->n_philo)
+	{
+		if (table->philo_pid[i] != 0)
+			kill(table->philo_pid[i], SIGKILL);
+	}
 }
 
 int	philo(int argc, char **argv)
@@ -96,13 +90,12 @@ int	philo(int argc, char **argv)
 	{
 		new_philo(i, table);
 	}
-
-	//wait_for_death(table, philos);
-
 	waitpid(-1, &status, 0);
 	dead_philo = WEXITSTATUS(status);
-	while( wait(NULL) > 0)
-		;
+	if (dead_philo)
+	{
+		kill_all(table);
+	}
 	print_end(dead_philo, table);
 	free(table->philo_pid);
 	free(table);
