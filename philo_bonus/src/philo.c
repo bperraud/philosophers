@@ -87,13 +87,15 @@ int	philo(int argc, char **argv)
 	waitpid(-1, &status, 0);
 	dead_philo = WEXITSTATUS(status);
 	if (dead_philo)
+	{
 		kill_all(table);
+		print_end(dead_philo, table);
+	}
 	else
 	{
 		while (wait(NULL) > 0)
 			;
 	}
-	print_end(dead_philo, table);
 	free_table(table);
 	return (0);
 }

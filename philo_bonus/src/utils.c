@@ -48,8 +48,6 @@ t_table	*free_table(t_table *table)
 	sem_unlink("sem_print");
 	sem_unlink("sem_forks");
 	sem_unlink("sem_end");
-
-
 	free(table->philo_pid);
 	free(table);
 	return (NULL);

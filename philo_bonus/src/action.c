@@ -36,6 +36,7 @@ void	print_action(t_philo *philo, int action)
 		return ;
 	}
 	sem_wait(philo->table->sem_print);
+	printf(RESET);
 	printf("%d ", get_time(philo->table));
 	if (action == FORK)
 		printf("%s%d has taken a fork\n", CYAN, philo->index);
@@ -51,10 +52,6 @@ void	print_action(t_philo *philo, int action)
 
 void	print_end(int dead_philo, t_table *table)
 {
-	if (!dead_philo)
-	{
-		return ;
-	}
 	sem_wait(table->sem_print);
 	printf("%d ", get_time(table));
 	printf("%s%d died\n", RED, dead_philo);
