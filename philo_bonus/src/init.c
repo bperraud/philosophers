@@ -23,6 +23,7 @@ t_philo	*init_philo(int index, t_table *table)
 	philo->meal_eaten = 0;
 	philo->index = index;
 	philo->table = table;
+	philo->simulation_end = 0;
 	return (philo);
 }
 
@@ -54,7 +55,6 @@ t_table	*init_table(int argc, char **argv)
 	table->time_to_die = ft_atoi(argv[2]);
 	table->time_to_eat = ft_atoi(argv[3]);
 	table->time_to_sleep = ft_atoi(argv[4]);
-	table->simulation_end = 0;
 	if (argc == 6)
 		table->n_must_eat = ft_atoi(argv[5]);
 	else
