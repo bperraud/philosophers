@@ -98,6 +98,7 @@ int	philo(int argc, char **argv)
 	i = -1;
 	while (i++ < table->n_philo - 1)
 		pthread_join(philos[i]->thread_id, NULL);
-	free(table);
+	free_table(table);
+	free_philos(table->n_philo, philos);
 	return (1);
 }

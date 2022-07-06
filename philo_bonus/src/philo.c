@@ -19,6 +19,7 @@ static void	*check_death(void *arg)
 	philo = (t_philo *) arg;
 	while (1)
 	{
+		usleep(100);
 		if (get_time(philo->table) - philo->last_meal_time
 			> philo->table->time_to_die)
 		{
@@ -93,7 +94,7 @@ int	philo(int argc, char **argv)
 	}
 	else
 	{
-		while (wait(NULL) > 0)
+		while (waitpid(-1, NULL, 0) > 0)
 			;
 	}
 	free_table(table);

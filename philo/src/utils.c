@@ -40,13 +40,14 @@ int	ft_atoi(const char *str)
 	return ((int)(res * neg));
 }
 
-t_philo	**free_philos(int index, t_philo **philos)
+t_philo	**free_philos(int nb_philo, t_philo **philos)
 {
 	int	i;
 
 	i = 0;
-	while (i < index)
+	while (i < nb_philo)
 	{
+		pthread_mutex_destroy(&philos[i]->left_fork);
 		free(philos[i]);
 		i++;
 	}
@@ -56,6 +57,8 @@ t_philo	**free_philos(int index, t_philo **philos)
 
 t_table	*free_table(t_table *table)
 {
+	pthread_mutex_destroy(&table->std_mutex);
+	pthread_mutex_destroy(&table->end_mutex);
 	free(table);
 	return (NULL);
 }
