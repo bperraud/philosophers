@@ -60,13 +60,13 @@ t_table	*init_table(int argc, char **argv)
 		table->n_must_eat = ft_atoi(argv[5]);
 	else
 		table->n_must_eat = 0;
+	setup_semaphores(table);
 	if (table->n_philo <= 0 || table->time_to_die < 0
 		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
 		return (free_table(table));
 	table->philo_pid = malloc(sizeof(int) * table->n_philo);
 	if (!table->philo_pid)
 		return (free_table(table));
-	setup_semaphores(table);
 	gettimeofday(&table->t0, NULL);
 	return (table);
 }

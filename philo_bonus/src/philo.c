@@ -47,13 +47,16 @@ static void	new_philo(int index, t_table *table)
 			sem_post(philo->table->sem_end);
 			eat(philo);
 			if (philo->meal_eaten == philo->table->n_must_eat)
+			{
+				free(philo);
 				exit(0);
+			}
 			sem_wait(philo->table->sem_end);
 		}
 		sem_post(philo->table->sem_end);
+		free(philo);
 		exit(philo->index);
 	}
-	return ;
 }
 
 static void	kill_all(t_table *table)
@@ -91,7 +94,6 @@ int	philo(int argc, char **argv)
 			;
 	}
 	print_end(dead_philo, table);
-	free(table->philo_pid);
-	free(table);
-	return (1);
+	free_table(table);
+	return (0);
 }
