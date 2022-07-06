@@ -46,15 +46,14 @@ void	print_action(t_philo *philo, int action)
 		printf("%s%d is sleeping\n", MAGENTA, philo->index);
 	else if (action == THINK)
 		printf("%s%d is thinking\n", YELLOW, philo->index);
-	printf(RESET);
 	sem_post(philo->table->sem_print);
 }
 
 void	print_end(int dead_philo, t_table *table)
 {
 	sem_wait(table->sem_print);
+	printf(RESET);
 	printf("%d ", get_time(table));
 	printf("%s%d died\n", RED, dead_philo);
-	printf(RESET);
 	sem_post(table->sem_print);
 }
