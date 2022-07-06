@@ -14,21 +14,11 @@
 
 static int	check_death(t_philo *philo)
 {
-	sem_wait(philo->table->sem_end);
-	if (philo->table->simulation_end)
-	{
-		sem_post(philo->table->sem_end);
-		return (1);
-	}
 	if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
 	{
-		philo->table->simulation_end = 1;
-		sem_post(philo->table->sem_end);
 		exit(philo->index);
-		exit(42);
 	}
-	sem_post(philo->table->sem_end);
-	return (0);
+	return 0;
 }
 
 static void	*launch_thread(void *arg)
@@ -36,31 +26,18 @@ static void	*launch_thread(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	while (!check_death(philo))
+	while (1)
 	{
-		eat(philo);
+		usleep(50);
+		if (get_time(philo->table) - philo->last_meal_time > philo->table->time_to_die)
+		{
+			exit(philo->index);
+		}
 	}
 	return (NULL);
 }
 
 /*
-static int	satiate(t_table *table, t_philo **philos)
-{
-	int	i;
-
-	i = -1;
-	if (!table->n_must_eat)
-		return (0);
-	while (i++ < table->n_philo - 1)
-	{
-		if (philos[i]->meal_eaten != table->n_must_eat)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-*/
-
 static void	wait_for_death(t_table *table, t_philo **philos)
 {
 	int	i;
@@ -74,12 +51,13 @@ static void	wait_for_death(t_table *table, t_philo **philos)
 				return ;
 			i++;
 		}
-		/*
+
 		if (satiate(table, philos))
 			return ;
-			*/
+
 	}
 }
+*/
 
 static void	new_philo(int index, t_table *table)
 {
@@ -90,7 +68,9 @@ static void	new_philo(int index, t_table *table)
 	if (pid == 0)
 	{
 		philo = init_philo(index, table);
-		while (!check_death(philo))
+		pthread_create(&philo->thread, NULL, launch_thread, philo);
+		//while (!check_death(philo))
+		while (1)
 		{
 			eat(philo);
 			if (philo->meal_eaten == philo->table->n_must_eat)

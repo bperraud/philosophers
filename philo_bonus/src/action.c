@@ -33,14 +33,6 @@ void	eat(t_philo *philo)
 
 void	print_action(t_philo *philo, int action)
 {
-	sem_wait(philo->table->sem_end);
-	if (philo->table->simulation_end)
-	{
-		sem_post(philo->table->sem_end);
-		return ;
-	}
-	sem_post(philo->table->sem_end);
-
 	sem_wait(philo->table->sem_print);
 	printf("%d ", get_time(philo->table));
 	if (action == FORK)
