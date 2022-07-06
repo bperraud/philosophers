@@ -27,22 +27,22 @@ t_philo	*init_philo(int index, t_table *table)
 	return (philo);
 }
 
-int	setup_semaphores(t_table *table)
+static int	setup_semaphores(t_table *table)
 {
 	sem_unlink("sem_print");
 	sem_unlink("sem_forks");
 	sem_unlink("sem_end");
 	table->sem_print = sem_open("sem_print", O_CREAT | O_EXCL, 0644, 1);
 	if (table->sem_print == SEM_FAILED)
-		exit(EXIT_FAILURE);
+		return (1);
 	table->sem_forks = sem_open("sem_forks", O_CREAT | O_EXCL, 0644,
 			table->n_philo / 2);
 	if (table->sem_forks == SEM_FAILED)
-		exit(EXIT_FAILURE);
+		return (1);
 	table->sem_end = sem_open("sem_end", O_CREAT | O_EXCL, 0644, 1);
 	if (table->sem_end == SEM_FAILED)
-		exit(EXIT_FAILURE);
-	return (1);
+		return (1);
+	return (0);
 }
 
 t_table	*init_table(int argc, char **argv)
@@ -60,7 +60,8 @@ t_table	*init_table(int argc, char **argv)
 		table->n_must_eat = ft_atoi(argv[5]);
 	else
 		table->n_must_eat = 0;
-	setup_semaphores(table);
+	if (setup_semaphores(table))
+		return (free_table(table));
 	if (table->n_philo <= 0 || table->time_to_die < 0
 		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
 		return (free_table(table));
