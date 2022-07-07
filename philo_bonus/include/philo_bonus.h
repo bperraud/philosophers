@@ -56,7 +56,6 @@ typedef struct s_table
 	t_time			t0;
 	sem_t			*sem_print;
 	sem_t			*sem_forks;
-	sem_t			*sem_end;
 	int				*philo_pid;
 }					t_table;
 
