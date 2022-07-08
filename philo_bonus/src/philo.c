@@ -30,7 +30,7 @@ static void	*check_death(void *arg)
 			sem_post(philo->table->sem_end);
 			exit(philo->index);
 		}
-		sem_post(philo->table->sem_end);
+		usleep(1000);
 	}
 	return (NULL);
 }
@@ -42,6 +42,7 @@ static void	new_philo(int index, t_table *table)
 
 	pid = fork();
 	table->philo_pid[index - 1] = pid;
+	usleep(20);
 	if (pid == 0)
 	{
 		philo = init_philo(index, table);
@@ -55,7 +56,6 @@ static void	new_philo(int index, t_table *table)
 				free(philo);
 				exit(0);
 			}
-			sem_wait(philo->table->sem_end);
 		}
 	}
 }
@@ -67,8 +67,8 @@ static void	kill_all(t_table *table)
 	i = -1;
 	while (++i < table->n_philo)
 	{
-		//if (table->philo_pid[i] != 0)
-		kill(table->philo_pid[i], SIGKILL);
+		if (table->philo_pid[i] != 0)
+			kill(table->philo_pid[i], SIGKILL);
 	}
 }
 

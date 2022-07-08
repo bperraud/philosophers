@@ -32,10 +32,6 @@ int	eat(t_philo *philo)
 
 void	print_action(t_philo *philo, int action)
 {
-	if (philo->simulation_end)
-	{
-		return ;
-	}
 	sem_wait(philo->table->sem_print);
 	printf(RESET);
 	printf("%d ", get_time(philo->table));
