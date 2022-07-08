@@ -12,7 +12,7 @@
 
 #include "philo_bonus.h"
 
-void	eat(t_philo *philo)
+int	eat(t_philo *philo)
 {
 	sem_wait(philo->table->sem_forks);
 	print_action(philo, FORK);
@@ -23,10 +23,11 @@ void	eat(t_philo *philo)
 	sleep_ms(philo->table->time_to_eat);
 	sem_post(philo->table->sem_forks);
 	if (philo->meal_eaten == philo->table->n_must_eat)
-		return ;
+		return (1);
 	print_action(philo, SLEEP);
 	sleep_ms(philo->table->time_to_sleep);
 	print_action(philo, THINK);
+	return (0);
 }
 
 void	print_action(t_philo *philo, int action)
@@ -51,9 +52,7 @@ void	print_action(t_philo *philo, int action)
 
 void	print_end(int dead_philo, t_table *table)
 {
-	sem_wait(table->sem_print);
 	printf(RESET);
 	printf("%d ", get_time(table));
 	printf("%s%d died\n", RED, dead_philo);
-	sem_post(table->sem_print);
 }

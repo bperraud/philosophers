@@ -19,11 +19,15 @@ static void	*check_death(void *arg)
 	philo = (t_philo *) arg;
 	while (1)
 	{
-		usleep(100);
+		sem_wait(philo->table->sem_end);
 		if (get_time(philo->table) - philo->last_meal_time
 			> philo->table->time_to_die)
 		{
+			sem_wait(philo->table->sem_print);
+			printf("DEATH : %i\n", get_time(philo->table));
+			sem_post(philo->table->sem_print);
 			philo->simulation_end = 1;
+			sem_post(philo->table->sem_end);
 			exit(philo->index);
 		}
 		sem_post(philo->table->sem_end);
@@ -43,20 +47,16 @@ static void	new_philo(int index, t_table *table)
 		philo = init_philo(index, table);
 		pthread_create(&philo->thread, NULL, check_death, philo);
 		sem_wait(philo->table->sem_end);
-		while (!philo->simulation_end)
+		while (1)
 		{
 			sem_post(philo->table->sem_end);
-			eat(philo);
-			if (philo->meal_eaten == philo->table->n_must_eat)
+			if (eat(philo))
 			{
 				free(philo);
 				exit(0);
 			}
 			sem_wait(philo->table->sem_end);
 		}
-		sem_post(philo->table->sem_end);
-		free(philo);
-		exit(philo->index);
 	}
 }
 
@@ -67,8 +67,8 @@ static void	kill_all(t_table *table)
 	i = -1;
 	while (++i < table->n_philo)
 	{
-		if (table->philo_pid[i] != 0)
-			kill(table->philo_pid[i], SIGKILL);
+		//if (table->philo_pid[i] != 0)
+		kill(table->philo_pid[i], SIGKILL);
 	}
 }
 

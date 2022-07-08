@@ -85,7 +85,7 @@ t_table	*init_table(int argc, char **argv);
 t_philo	*init_philo(int index, t_table *table);
 
 /* philo action */
-void	eat(t_philo *philo);
+int		eat(t_philo *philo);
 void	print_end(int dead_philo, t_table *table);
 
 #endif
