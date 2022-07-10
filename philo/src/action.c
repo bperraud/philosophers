@@ -68,14 +68,15 @@ void	eat(t_philo *philo)
 
 void	print_action(t_philo *philo, int action)
 {
+	pthread_mutex_lock(&philo->table->print_mutex);
 	pthread_mutex_lock(&philo->table->end_mutex);
 	if (philo->table->simulation_end)
 	{
 		pthread_mutex_unlock(&philo->table->end_mutex);
+		pthread_mutex_unlock(&philo->table->print_mutex);
 		return ;
 	}
 	pthread_mutex_unlock(&philo->table->end_mutex);
-	pthread_mutex_lock(&philo->table->std_mutex);
 	printf(RESET);
 	printf("%d ", get_time(philo->table));
 	if (action == FORK)
@@ -86,7 +87,7 @@ void	print_action(t_philo *philo, int action)
 		printf("%s%d is sleeping\n", MAGENTA, philo->index);
 	else if (action == THINK)
 		printf("%s%d is thinking\n", YELLOW, philo->index);
-	pthread_mutex_unlock(&philo->table->std_mutex);
+	pthread_mutex_unlock(&philo->table->print_mutex);
 }
 
 void	print_end(t_table *table)
@@ -96,11 +97,11 @@ void	print_end(t_table *table)
 	{
 		usleep(1);
 		pthread_mutex_unlock(&table->end_mutex);
-		pthread_mutex_lock(&table->std_mutex);
+		pthread_mutex_lock(&table->print_mutex);
 		printf(RESET);
 		printf("%d ", get_time(table));
 		printf("%s%d died\n", RED, table->dead_philo_index);
-		pthread_mutex_unlock(&table->std_mutex);
+		pthread_mutex_unlock(&table->print_mutex);
 		return ;
 	}
 	pthread_mutex_unlock(&table->end_mutex);

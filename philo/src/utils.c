@@ -51,13 +51,15 @@ t_philo	**free_philos(int nb_philo, t_philo **philos)
 		free(philos[i]);
 		i++;
 	}
+	pthread_mutex_destroy(&philos[0]->table->end_mutex);
+	pthread_mutex_destroy(&philos[0]->table->print_mutex);
 	free(philos);
 	return (NULL);
 }
 
 t_table	*free_table(t_table *table)
 {
-	pthread_mutex_destroy(&table->std_mutex);
+	pthread_mutex_destroy(&table->print_mutex);
 	pthread_mutex_destroy(&table->end_mutex);
 	free(table);
 	return (NULL);

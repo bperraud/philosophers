@@ -74,9 +74,10 @@ t_table	*init_table(int argc, char **argv)
 	else
 		table->n_must_eat = 0;
 	if (table->n_philo <= 0 || table->time_to_die < 0
-		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
+		|| table->time_to_eat < 0 || table->time_to_sleep < 0
+		|| table->n_must_eat < 0)
 		return (free_table(table));
-	if (pthread_mutex_init(&table->std_mutex, NULL) != 0
+	if (pthread_mutex_init(&table->print_mutex, NULL) != 0
 		|| pthread_mutex_init(&table->end_mutex, NULL) != 0)
 		return (NULL);
 	gettimeofday(&table->t0, NULL);

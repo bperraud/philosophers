@@ -63,7 +63,8 @@ t_table	*init_table(int argc, char **argv)
 	if (setup_semaphores(table))
 		return (free_table(table));
 	if (table->n_philo <= 0 || table->time_to_die < 0
-		|| table->time_to_eat < 0 || table->time_to_sleep < 0)
+		|| table->time_to_eat < 0 || table->time_to_sleep < 0
+		|| table->n_must_eat < 0)
 		return (free_table(table));
 	table->philo_pid = malloc(sizeof(int) * table->n_philo);
 	if (!table->philo_pid)

@@ -52,7 +52,7 @@ typedef struct s_table
 	int				dead_philo_index;
 	int				simulation_end;
 	t_time			t0;
-	pthread_mutex_t	std_mutex;
+	pthread_mutex_t	print_mutex;
 	pthread_mutex_t	end_mutex;
 }					t_table;
 
