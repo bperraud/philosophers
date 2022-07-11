@@ -95,7 +95,6 @@ void	print_end(t_table *table)
 	pthread_mutex_lock(&table->end_mutex);
 	if (table->simulation_end)
 	{
-		usleep(1);
 		pthread_mutex_unlock(&table->end_mutex);
 		pthread_mutex_lock(&table->print_mutex);
 		printf(RESET);

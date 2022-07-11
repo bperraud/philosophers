@@ -79,7 +79,7 @@ t_table	*init_table(int argc, char **argv)
 		return (free_table(table));
 	if (pthread_mutex_init(&table->print_mutex, NULL) != 0
 		|| pthread_mutex_init(&table->end_mutex, NULL) != 0)
-		return (NULL);
+		return (free_table(table));
 	gettimeofday(&table->t0, NULL);
 	return (table);
 }
