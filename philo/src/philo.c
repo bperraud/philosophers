@@ -24,8 +24,8 @@ static int	check_death(t_philo *philo)
 		> philo->table->time_to_die)
 	{
 		philo->table->simulation_end = 1;
-		pthread_mutex_unlock(&philo->table->end_mutex);
 		philo->table->dead_philo_index = philo->index;
+		pthread_mutex_unlock(&philo->table->end_mutex);
 		return (1);
 	}
 	pthread_mutex_unlock(&philo->table->end_mutex);
@@ -75,6 +75,7 @@ static void	wait_for_death(t_table *table, t_philo **philos)
 		}
 		if (satiate(table, philos))
 			return ;
+		usleep(1000);
 	}
 }
 
