@@ -45,8 +45,8 @@ void	eat(t_philo *philo)
 	if (philo->table->n_must_eat
 		&& philo->meal_eaten == philo->table->n_must_eat)
 		return ;
-	if (!(can_pick_left(philo) && can_pick_right(philo)))
-		return ;
+	while (!(can_pick_left(philo) && can_pick_right(philo)))
+		sleep_ms(10);
 	pthread_mutex_lock(philo->right_fork);
 	print_action(philo, FORK);
 	pthread_mutex_lock(&philo->left_fork);

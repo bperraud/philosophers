@@ -1,0 +1,5 @@
+philo/objs/*
+philo/philo
+philo_bonus/objs/*
+philo_bonus/philo_bonus
+.vscode
