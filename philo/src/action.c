@@ -57,8 +57,8 @@ void	eat(t_philo *philo)
 	sleep_ms(philo->table->time_to_eat);
 	philo->left_dirty = !philo->left_dirty;
 	*philo->right_dirty = !*philo->right_dirty;
-	pthread_mutex_unlock(&philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(&philo->left_fork);
 	if (philo->meal_eaten == philo->table->n_must_eat)
 		return ;
 	print_action(philo, SLEEP);

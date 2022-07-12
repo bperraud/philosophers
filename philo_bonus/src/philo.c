@@ -28,6 +28,7 @@ static void	*check_death(void *arg)
 			exit(philo->index);
 		}
 		sem_post(philo->table->sem_end);
+		sleep_ms(1000);
 	}
 	return (NULL);
 }
