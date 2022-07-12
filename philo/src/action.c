@@ -46,17 +46,17 @@ void	eat(t_philo *philo)
 			== philo->table->n_must_eat) || philo->table->n_philo == 1)
 		return ;
 	while (!(can_pick_left(philo) && can_pick_right(philo)))
-		sleep_ms(10);
+		usleep(50);
 	pthread_mutex_lock(philo->right_fork);
+	philo->left_dirty = !philo->left_dirty;
 	print_action(philo, FORK);
 	pthread_mutex_lock(&philo->left_fork);
+	*philo->right_dirty = !*philo->right_dirty;
 	print_action(philo, FORK);
 	print_action(philo, EAT);
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->table);
 	sleep_ms(philo->table->time_to_eat);
-	philo->left_dirty = !philo->left_dirty;
-	*philo->right_dirty = !*philo->right_dirty;
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(&philo->left_fork);
 	if (philo->meal_eaten == philo->table->n_must_eat)
@@ -72,8 +72,8 @@ void	print_action(t_philo *philo, int action)
 	pthread_mutex_lock(&philo->table->end_mutex);
 	if (philo->table->simulation_end)
 	{
-		pthread_mutex_unlock(&philo->table->end_mutex);
 		pthread_mutex_unlock(&philo->table->print_mutex);
+		pthread_mutex_unlock(&philo->table->end_mutex);
 		return ;
 	}
 	pthread_mutex_unlock(&philo->table->end_mutex);
@@ -92,16 +92,14 @@ void	print_action(t_philo *philo, int action)
 
 void	print_end(t_table *table)
 {
+	pthread_mutex_lock(&table->print_mutex);
 	pthread_mutex_lock(&table->end_mutex);
 	if (table->simulation_end)
 	{
-		pthread_mutex_unlock(&table->end_mutex);
-		pthread_mutex_lock(&table->print_mutex);
 		printf(RESET);
 		printf("%d ", get_time(table));
 		printf("%s%d died\n", RED, table->dead_philo_index);
-		pthread_mutex_unlock(&table->print_mutex);
-		return ;
 	}
 	pthread_mutex_unlock(&table->end_mutex);
+	pthread_mutex_unlock(&table->print_mutex);
 }
