@@ -89,14 +89,14 @@ void	print_action(t_philo *philo, int action)
 
 void	print_end(t_table *table)
 {
-	pthread_mutex_lock(&table->print_mutex);
 	pthread_mutex_lock(&table->end_mutex);
 	if (table->simulation_end)
 	{
+		pthread_mutex_lock(&table->print_mutex);
 		printf(RESET);
 		printf("%d ", get_time(table));
 		printf("%s%d died\n", RED, table->dead_philo_index);
+		pthread_mutex_unlock(&table->print_mutex);
 	}
-	pthread_mutex_unlock(&table->print_mutex);
 	pthread_mutex_unlock(&table->end_mutex);
 }
