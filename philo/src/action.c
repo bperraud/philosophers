@@ -48,14 +48,14 @@ void	eat(t_philo *philo)
 	while (!(can_pick_left(philo) && can_pick_right(philo)))
 		usleep(50);
 	pthread_mutex_lock(philo->right_fork);
-	philo->left_dirty = !philo->left_dirty;
 	print_action(philo, FORK);
 	pthread_mutex_lock(&philo->left_fork);
-	*philo->right_dirty = !*philo->right_dirty;
 	print_action(philo, FORK);
 	print_action(philo, EAT);
 	philo->meal_eaten += 1;
 	philo->last_meal_time = get_time(philo->table);
+	philo->left_dirty = !philo->left_dirty;
+	*philo->right_dirty = !*philo->right_dirty;
 	sleep_ms(philo->table->time_to_eat);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(&philo->left_fork);
