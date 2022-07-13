@@ -12,8 +12,6 @@
 
 #include "philo.h"
 
-int death;
-
 static int	check_death(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->table->end_mutex);
@@ -43,7 +41,7 @@ static void	*launch_thread(void *arg)
 	{
 		eat(philo);
 	}
-	exit(1);
+	return (NULL);
 }
 
 static int	satiate(t_table *table, t_philo **philos)
@@ -87,8 +85,6 @@ int	philo(int argc, char **argv)
 	t_philo	**philos;
 	t_table	*table;
 
-	death = 0;
-
 	table = init_table(argc, argv);
 	philos = init_philos(table);
 	if (!philos)
@@ -100,13 +96,12 @@ int	philo(int argc, char **argv)
 	}
 	wait_for_death(table, philos);
 	print_end(table);
-	i = 0;
-	while (i < table->n_philo - 1)
+	i = -1;
+	while (i++ < table->n_philo - 1)
 	{
 		pthread_join(philos[i]->thread_id, NULL);
-		i++;
 	}
-	free_table(table);
 	free_philos(table->n_philo, philos);
+	free_table(table);
 	return (1);
 }
