@@ -20,7 +20,4 @@ __exemple :__
 
 `./philo 4 500 200 200`
 
-__exemple :__
-
-`./philo -v 4 500 200 200`
-
+![Capture d’écran de 2023-08-30 02-10-40](https://github.com/bperraud/philosophers/assets/93911934/bcbdff20-8e6f-47a9-8754-c58eccb0b465)
