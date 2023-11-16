@@ -16,7 +16,7 @@ __usage :__
 `./philo number_philosopher time_to_die time_to_eat time_to_sleep [number_of_time_each_philosophers_must_eat]`
 arguments in square brackets are not required
 
-__exemple :__
+__example :__
 
 `./philo 4 500 200 200`
 
