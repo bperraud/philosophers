@@ -9,9 +9,9 @@ In computer science, the dining philosophers problem is an example problem often
 `make` inside philo/.
 `make bonus` inside philo_bonus/.
 
-Then, you can test the project using an executable .
+Then, you can test the project using an executable.
 
-__usage :__
+## Usage example
 
 `./philo number_philosopher time_to_die time_to_eat time_to_sleep [number_of_time_each_philosophers_must_eat]`
 arguments in square brackets are not required
